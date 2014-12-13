@@ -1,0 +1,6 @@
+/target
+/Cargo.lock
+NOTES
+
+# Used for testing
+src/main.rs
