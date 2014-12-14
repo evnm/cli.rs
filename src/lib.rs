@@ -14,17 +14,17 @@
 #![crate_type="rlib"]
 
 extern crate getopts;
-use getopts::{OptGroup, short_usage};
+use getopts::{Matches, OptGroup, getopts, short_usage};
 use getopts::usage as getopts_usage;
-use std::os;
+use std::{io, os};
 
 mod test;
 
-/// Construct a canonical usage string from a collection of `OptGroup`s.
+/// Constructs a canonical usage string from a collection of `OptGroup`s.
 ///
 /// Usage strings format:
 ///
-///     Usage: <arv0> [option synopsis]...
+///     Usage: <argv0> [option synopsis]...
 ///
 ///     Options:
 ///         [option description]...
@@ -32,4 +32,28 @@ pub fn usage(opts: &[OptGroup]) -> String {
     let args = os::args();
     let argv0 = args[0].clone();
     format!("{}", getopts_usage(short_usage(argv0.as_slice(), opts).as_slice(), opts))
+}
+
+/// Parses the command-line arguments with which the program was executed
+/// according to a collection of `OptGroup`s.
+///
+/// Any flag parsing failure results in task panic. The program's usage string
+/// is printed to stderr prior to panic. Panic is induced in order to avoid
+/// program execution with undefined configuration. In such cases, the presence
+/// of unrecognized flags or invalid flag values implies confusion on the part
+/// of the executor. While perhaps overbearing, it is preferable to halt
+/// execution abruptly than to continue with the risk of unwanted behavior.
+pub fn parse_args(opts: &[OptGroup]) -> Matches {
+    match getopts(os::args().tail(), opts) {
+        Ok(matches) => matches,
+        Err(getopts_error) => {
+            // Write usage string to stderr, then panic.
+            match io::stderr().write_str(usage(opts).as_slice()) {
+                Ok(()) => panic!(getopts_error.to_string()),
+                Err(write_error) =>
+                    // Write to stderr failed -- panic with both error messages.
+                    panic!("{}\n{}", getopts_error.to_string(), write_error.to_string())
+            }
+        }
+    }
 }
