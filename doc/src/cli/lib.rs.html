@@ -142,6 +142,36 @@
 <span id='100'>100</span>
 <span id='101'>101</span>
 <span id='102'>102</span>
+<span id='103'>103</span>
+<span id='104'>104</span>
+<span id='105'>105</span>
+<span id='106'>106</span>
+<span id='107'>107</span>
+<span id='108'>108</span>
+<span id='109'>109</span>
+<span id='110'>110</span>
+<span id='111'>111</span>
+<span id='112'>112</span>
+<span id='113'>113</span>
+<span id='114'>114</span>
+<span id='115'>115</span>
+<span id='116'>116</span>
+<span id='117'>117</span>
+<span id='118'>118</span>
+<span id='119'>119</span>
+<span id='120'>120</span>
+<span id='121'>121</span>
+<span id='122'>122</span>
+<span id='123'>123</span>
+<span id='124'>124</span>
+<span id='125'>125</span>
+<span id='126'>126</span>
+<span id='127'>127</span>
+<span id='128'>128</span>
+<span id='129'>129</span>
+<span id='130'>130</span>
+<span id='131'>131</span>
+<span id='132'>132</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! A toolkit for building command-line programs in Rust.</span>
 <span class='doccomment'>//!</span>
@@ -159,6 +189,36 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! It uses [getopts](http://doc.rust-lang.org/getopts/) for argument parsing</span>
 <span class='doccomment'>//! and thus currently inherits `getopt`&#39;s `experimental` stability level.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ## Usage</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! The following example shows how to integrate `cli` functions into a program&#39;s</span>
+<span class='doccomment'>//! `main` function in order to avoid `getopts` boilerplate. Sane defaults are</span>
+<span class='doccomment'>//! provided for help and version output without forcing consuming code to buy into</span>
+<span class='doccomment'>//! an application framework.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!     extern crate cli;</span>
+<span class='doccomment'>//!     extern crate getopts;</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!     fn main() {</span>
+<span class='doccomment'>//!         let opts = &amp;[</span>
+<span class='doccomment'>//!             cli::helpopt(),</span>
+<span class='doccomment'>//!             cli::versionopt(),</span>
+<span class='doccomment'>//!             getopts::optopt(&quot;o&quot;, &quot;&quot;, &quot;Set output file name&quot;, &quot;FILENAME&quot;),</span>
+<span class='doccomment'>//!         ];</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!         let matches = cli::parse_args(opts);</span>
+<span class='doccomment'>//!         if matches.opt_present(&quot;h&quot;) {</span>
+<span class='doccomment'>//!             println!(&quot;{}&quot;, cli::usage_string(opts));</span>
+<span class='doccomment'>//!             return;</span>
+<span class='doccomment'>//!         }</span>
+<span class='doccomment'>//!         if matches.opt_present(&quot;version&quot;) {</span>
+<span class='doccomment'>//!             println!(&quot;{}&quot;, cli::version_string(&quot;0.0.1&quot;));</span>
+<span class='doccomment'>//!             return;</span>
+<span class='doccomment'>//!         }</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!         ...</span>
+<span class='doccomment'>//!     }</span>
 
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_name</span> <span class='op'>=</span> <span class='string'>&quot;cli&quot;</span>]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>experimental</span>]</span>
