@@ -16,6 +16,7 @@
 //! and thus currently inherits `getopt`'s `experimental` stability level.
 
 #![crate_name = "cli"]
+#![experimental]
 #![crate_type="rlib"]
 
 extern crate getopts;
