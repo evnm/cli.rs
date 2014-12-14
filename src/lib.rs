@@ -16,13 +16,20 @@
 #![crate_type="rlib"]
 
 extern crate getopts;
-use getopts::{Matches, OptGroup, getopts, short_usage};
+use getopts::{Matches, OptGroup, getopts, optflag, short_usage};
 use getopts::usage as getopts_usage;
 use std::{io, os};
 
 mod test;
 
-/// Constructs a canonical usage string from a collection of `OptGroup`s.
+/// The name by which the executed program was called.
+///
+/// Typically the file name or path of the invoked executable.
+pub fn argv0() -> String {
+    os::args()[0].clone()
+}
+
+/// Construct a canonical usage string from a collection of `OptGroup`s.
 ///
 /// Usage strings format:
 ///
@@ -33,11 +40,10 @@ mod test;
 ///         [option description]...
 ///```
 pub fn usage(opts: &[OptGroup]) -> String {
-    let argv0 = os::args()[0].clone();
-    format!("{}", getopts_usage(short_usage(argv0.as_slice(), opts).as_slice(), opts))
+    format!("{}", getopts_usage(short_usage(argv0().as_slice(), opts).as_slice(), opts))
 }
 
-/// Parses the command-line arguments with which the program was executed
+/// Parse the command-line arguments with which the program was executed
 /// according to a collection of `OptGroup`s.
 ///
 /// Any flag parsing failure results in task panic. The program's usage string
@@ -59,4 +65,21 @@ pub fn parse_args(opts: &[OptGroup]) -> Matches {
             }
         }
     }
+}
+
+/// Create a help flag `OptGroup`.
+///
+/// The returned `OptGroup` is an optional long option for the input `-h`
+/// and `--help`.
+pub fn helpopt() -> OptGroup {
+    optflag("h", "help", "Print this help menu")
+}
+
+/// Create a version flag `OptGroup`.
+///
+/// The returned `OptGroup` is an optional long option for the input
+/// `--version`. `-v` and `-V` are avoided in order to prevent confusion in the
+/// event when a flag is needed for enabling verbose output.
+pub fn versionopt() -> OptGroup {
+    optflag("", "version", format!("Print the version of {} being run", argv0()).as_slice())
 }
