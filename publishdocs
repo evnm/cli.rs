@@ -1,0 +1,19 @@
+#!/bin/bash
+# Generate and publish rustdoc website to GitHub Pages.
+
+set -e
+
+dir=/tmp/cli.$$
+trap "rm -fr $dir" 0 1 2
+
+cargo clean
+cargo doc
+git clone -b gh-pages git@github.com:evnm/cli.rs.git $dir >/dev/null 2>&1
+
+savedir=$(pwd)
+cd $dir
+git rm -fr .
+touch .nojekyll
+cp -r $savedir/target/doc .
+git add -f .
+git diff-index --quiet HEAD || (git commit -am"rustdoc push by $(whoami)"; git push origin gh-pages:gh-pages;)

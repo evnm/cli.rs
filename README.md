@@ -17,3 +17,8 @@ integrating with sysexits.
 It uses [getopts](http://doc.rust-lang.org/getopts/) for argument
 parsing and thus currently inherits `getopt`'s `experimental`
 stability level.
+
+## Documentation
+
+Generated `rustdoc` website is available at
+http://evanmeagher.net/cli.rs/doc/cli/.
