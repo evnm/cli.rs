@@ -19,8 +19,7 @@
 #![crate_type="rlib"]
 
 extern crate getopts;
-use getopts::{Matches, OptGroup, getopts, optflag, short_usage};
-use getopts::usage as getopts_usage;
+use getopts::{Matches, OptGroup, getopts, optflag, short_usage, usage};
 use std::{io, os};
 
 mod test;
@@ -34,7 +33,7 @@ pub fn argv0() -> String {
 
 /// Construct a canonical usage string from a collection of `OptGroup`s.
 ///
-/// Usage strings format:
+/// Usage string format:
 ///
 ///```ignore
 ///     Usage: <argv0> [option synopsis]...
@@ -42,8 +41,22 @@ pub fn argv0() -> String {
 ///     Options:
 ///         [option description]...
 ///```
-pub fn usage(opts: &[OptGroup]) -> String {
-    format!("{}", getopts_usage(short_usage(argv0().as_slice(), opts).as_slice(), opts))
+pub fn usage_string(opts: &[OptGroup]) -> String {
+    format!("{}", usage(short_usage(argv0().as_slice(), opts).as_slice(), opts))
+}
+
+/// Construct a version string.
+///
+/// Intended for use as output in response to `--version` as defined by
+/// `cli::versionopt`.
+///
+/// Version string format:
+///
+///```ignore
+///     <argv0> version <version>
+///```
+pub fn version_string(version: &str) -> String {
+    format!("{} version {}", argv0(), version)
 }
 
 /// Parse the command-line arguments with which the program was executed
@@ -60,7 +73,7 @@ pub fn parse_args(opts: &[OptGroup]) -> Matches {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
-            match io::stderr().write_str(usage(opts).as_slice()) {
+            match io::stderr().write_str(usage_string(opts).as_slice()) {
                 Ok(()) => panic!(getopts_error.to_string()),
                 Err(write_error) =>
                     // Write to stderr failed -- panic with both error messages.
