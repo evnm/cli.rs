@@ -24,13 +24,14 @@ mod test;
 ///
 /// Usage strings format:
 ///
+///```ignore
 ///     Usage: <argv0> [option synopsis]...
 ///
 ///     Options:
 ///         [option description]...
+///```
 pub fn usage(opts: &[OptGroup]) -> String {
-    let args = os::args();
-    let argv0 = args[0].clone();
+    let argv0 = os::args()[0].clone();
     format!("{}", getopts_usage(short_usage(argv0.as_slice(), opts).as_slice(), opts))
 }
 
