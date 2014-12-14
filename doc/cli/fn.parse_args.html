@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API stability overview for the Rust `cli` crate.">
-    <meta name="keywords" content="rust, rustlang, rust-lang">
+    <meta name="description" content="API documentation for the Rust `parse_args` fn in crate `cli`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, parse_args">
 
-    <title>cli - Stability dashboard</title>
+    <title>cli::parse_args - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'></p>
+        <p class='location'><a href='index.html'>cli</a></p><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.argv0.html'>argv0</a><a class='fn ' href='fn.helpopt.html'>helpopt</a><a class='fn current' href='fn.parse_args.html'>parse_args</a><a class='fn ' href='fn.usage_string.html'>usage_string</a><a class='fn ' href='fn.version_string.html'>version_string</a><a class='fn ' href='fn.versionopt.html'>versionopt</a></div>
     </section>
 
     <nav class="sub">
@@ -40,19 +40,21 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod"><h1 class='fqn'>Stability dashboard: crate <a class='mod' href='index.html'>cli</a></h1>
-This dashboard summarizes the stability levels for all of the public modules of
-the crate, according to the total number of items at each level in the module and
-its children (percentages total for cli):
-<blockquote>
-<a class='stability Stable'></a> stable (0%),<br/>
-<a class='stability Unstable'></a> unstable (0%),<br/>
-<a class='stability Experimental'></a> experimental (0%),<br/>
-<a class='stability Deprecated'></a> deprecated (0%),<br/>
-<a class='stability Unmarked'></a> unmarked (100%)
-</blockquote>
-The counts do not include methods or trait
-implementations that are visible only through a re-exported type.<table><tr><td><a href='index.html'>cli</a></td><td class='summary-column'><span class='summary Stable' style='width: 0.0000%; display: inline-block'>&nbsp</span><span class='summary Unstable' style='width: 0.0000%; display: inline-block'>&nbsp</span><span class='summary Experimental' style='width: 0.0000%; display: inline-block'>&nbsp</span><span class='summary Deprecated' style='width: 0.0000%; display: inline-block'>&nbsp</span><span class='summary Unmarked' style='width: 100.0000%; display: inline-block'>&nbsp</span></td></tr></table></section>
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>cli</a>::<wbr><a class='fn' href=''>parse_args</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-130' href='../src/cli/lib.rs.html#72-85'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn parse_args(opts: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='http://doc.rust-lang.org/nightly/getopts/struct.OptGroup.html' title='getopts::OptGroup'>OptGroup</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/getopts/struct.Matches.html' title='getopts::Matches'>Matches</a></pre><div class='docblock'><p>Parse the command-line arguments with which the program was executed
+according to a collection of <code>OptGroup</code>s.</p>
+
+<p>Any flag parsing failure results in task panic. The program&#39;s usage string
+is printed to stderr prior to panic. Panic is induced in order to avoid
+program execution with undefined configuration. In such cases, the presence
+of unrecognized flags or invalid flag values implies confusion on the part
+of the executor. While perhaps overbearing, it is preferable to halt
+execution abruptly than to continue with the risk of unwanted behavior.</p>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

@@ -41,10 +41,10 @@
     </nav>
 
     <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>cli</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>cli</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/cli/lib.rs.html#1-85'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/cli/lib.rs.html#1-102'>[src]</a></span></h1>
 <div class='docblock'><p>A toolkit for building command-line programs in Rust.</p>
 
 <p><code>cli</code> aims to</p>
@@ -57,27 +57,30 @@
 <li>encourage appropriate use of exit statuses</li>
 </ul>
 
-<p><code>cli</code> uses <a href="http://doc.rust-lang.org/getopts/">getopts</a> for
-command-line argument parsing and thus currently inherits its
-<code>experimental</code> stability level.</p>
+<p>Concretely, <code>cli</code> is a collection of simple functions for formatting
+command-line output, defining flags, and (eventually) things like
+integrating with sysexits.</p>
+
+<p>It uses <a href="http://doc.rust-lang.org/getopts/">getopts</a> for argument parsing
+and thus currently inherits <code>getopt</code>&#39;s <code>experimental</code> stability level.</p>
 </div><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
                     <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.argv0.html'
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.argv0.html'
                                title='cli::argv0'>argv0</a></td>
                         <td class='docblock short'><p>The name by which the executed program was called.</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.helpopt.html'
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.helpopt.html'
                                title='cli::helpopt'>helpopt</a></td>
                         <td class='docblock short'><p>Create a help flag <code>OptGroup</code>.</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.parse_args.html'
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.parse_args.html'
                                title='cli::parse_args'>parse_args</a></td>
                         <td class='docblock short'><p>Parse the command-line arguments with which the program was executed
 according to a collection of <code>OptGroup</code>s.</p>
@@ -85,14 +88,21 @@ according to a collection of <code>OptGroup</code>s.</p>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.usage.html'
-                               title='cli::usage'>usage</a></td>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.usage_string.html'
+                               title='cli::usage_string'>usage_string</a></td>
                         <td class='docblock short'><p>Construct a canonical usage string from a collection of <code>OptGroup</code>s.</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.versionopt.html'
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.version_string.html'
+                               title='cli::version_string'>version_string</a></td>
+                        <td class='docblock short'><p>Construct a version string.</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='fn' href='fn.versionopt.html'
                                title='cli::versionopt'>versionopt</a></td>
                         <td class='docblock short'><p>Create a version flag <code>OptGroup</code>.</p>
 </td>
