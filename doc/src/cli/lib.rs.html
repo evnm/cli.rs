@@ -181,6 +181,19 @@
 <span id='139'>139</span>
 <span id='140'>140</span>
 <span id='141'>141</span>
+<span id='142'>142</span>
+<span id='143'>143</span>
+<span id='144'>144</span>
+<span id='145'>145</span>
+<span id='146'>146</span>
+<span id='147'>147</span>
+<span id='148'>148</span>
+<span id='149'>149</span>
+<span id='150'>150</span>
+<span id='151'>151</span>
+<span id='152'>152</span>
+<span id='153'>153</span>
+<span id='154'>154</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! A toolkit for building command-line programs in Rust.</span>
 <span class='doccomment'>//!</span>
@@ -228,6 +241,19 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//!         ...</span>
 <span class='doccomment'>//!     }</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! When compiled to a binary named `foo`, this program emits the following output.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!     $ foo -h</span>
+<span class='doccomment'>//!     Usage: foo [-h] [--version] [-o FILENAME]</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!     Options:</span>
+<span class='doccomment'>//!         -h --help           Print this help menu</span>
+<span class='doccomment'>//!         --version           Print the version of target/cli being run</span>
+<span class='doccomment'>//!         -o FILENAME         Set output file name</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!     $ foo --version</span>
+<span class='doccomment'>//!     foo version 0.0.1</span>
 
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_name</span> <span class='op'>=</span> <span class='string'>&quot;cli&quot;</span>]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>experimental</span>]</span>

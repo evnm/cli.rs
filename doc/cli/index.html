@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>cli</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/cli/lib.rs.html#1-141'>[src]</a></span></h1>
+        </span><a id='src-0' href='../src/cli/lib.rs.html#1-154'>[src]</a></span></h1>
 <div class='docblock'><p>A toolkit for building command-line programs in Rust.</p>
 
 <p><code>cli</code> aims to</p>
@@ -93,6 +93,20 @@ an application framework.</p>
 
     ...
 }
+</pre>
+
+<p>When compiled to a binary named <code>foo</code>, this program emits the following output.</p>
+<pre class='rust '>
+$ <span class='ident'>foo</span> <span class='op'>-</span><span class='ident'>h</span>
+<span class='ident'>Usage</span>: <span class='ident'>foo</span> [<span class='op'>-</span><span class='ident'>h</span>] [<span class='op'>-</span><span class='op'>-</span><span class='ident'>version</span>] [<span class='op'>-</span><span class='ident'>o</span> <span class='ident'>FILENAME</span>]
+
+<span class='ident'>Options</span>:
+    <span class='op'>-</span><span class='ident'>h</span> <span class='op'>-</span><span class='op'>-</span><span class='ident'>help</span>           <span class='ident'>Print</span> <span class='ident'>this</span> <span class='ident'>help</span> <span class='ident'>menu</span>
+    <span class='op'>-</span><span class='op'>-</span><span class='ident'>version</span>           <span class='ident'>Print</span> <span class='ident'>the</span> <span class='ident'>version</span> <span class='ident'>of</span> <span class='ident'>target</span><span class='op'>/</span><span class='ident'>cli</span> <span class='ident'>being</span> <span class='ident'>run</span>
+    <span class='op'>-</span><span class='ident'>o</span> <span class='ident'>FILENAME</span>         <span class='ident'>Set</span> <span class='ident'>output</span> <span class='ident'>file</span> <span class='ident'>name</span>
+
+$ <span class='ident'>foo</span> <span class='op'>-</span><span class='op'>-</span><span class='ident'>version</span>
+<span class='ident'>foo</span> <span class='ident'>version</span> <span class='number'>0.0</span>.<span class='number'>1</span>
 </pre>
 </div><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table>
