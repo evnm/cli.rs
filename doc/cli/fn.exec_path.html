@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `argv0` fn in crate `cli`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, argv0">
+    <meta name="description" content="API documentation for the Rust `exec_path` fn in crate `cli`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, exec_path">
 
-    <title>cli::argv0 - Rust</title>
+    <title>cli::exec_path - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>cli</a></p><div class='block fn'><h2>Functions</h2><a class='fn current' href='fn.argv0.html'>argv0</a><a class='fn ' href='fn.helpopt.html'>helpopt</a><a class='fn ' href='fn.parse_args.html'>parse_args</a><a class='fn ' href='fn.usage_string.html'>usage_string</a><a class='fn ' href='fn.version_string.html'>version_string</a><a class='fn ' href='fn.versionopt.html'>versionopt</a></div>
+        <p class='location'><a href='index.html'>cli</a></p><div class='block fn'><h2>Functions</h2><a class='fn current' href='fn.exec_path.html'>exec_path</a><a class='fn ' href='fn.helpopt.html'>helpopt</a><a class='fn ' href='fn.parse_args.html'>parse_args</a><a class='fn ' href='fn.usage_string.html'>usage_string</a><a class='fn ' href='fn.version_string.html'>version_string</a><a class='fn ' href='fn.versionopt.html'>versionopt</a></div>
     </section>
 
     <nav class="sub">
@@ -41,13 +41,14 @@
     </nav>
 
     <section id='main' class="content fn">
-<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>cli</a>::<wbr><a class='fn' href=''>argv0</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>cli</a>::<wbr><a class='fn' href=''>exec_path</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-17' href='../src/cli/lib.rs.html#61-63'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn argv0() -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></pre><div class='docblock'><p>The name by which the executed program was called.</p>
+        </span><a id='src-18' href='../src/cli/lib.rs.html#63-66'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn exec_path() -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/std/path/posix/struct.Path.html' title='std::path::posix::Path'>Path</a></pre><div class='docblock'><p>The file path of the executed program.</p>
 
-<p>Typically the file name or path of the invoked executable.</p>
+<p>Typically the file path of the invoked executable. If the invocation target
+is a symlink, then it will be resolved to the executable it links to.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

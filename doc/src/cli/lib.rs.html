@@ -172,6 +172,15 @@
 <span id='130'>130</span>
 <span id='131'>131</span>
 <span id='132'>132</span>
+<span id='133'>133</span>
+<span id='134'>134</span>
+<span id='135'>135</span>
+<span id='136'>136</span>
+<span id='137'>137</span>
+<span id='138'>138</span>
+<span id='139'>139</span>
+<span id='140'>140</span>
+<span id='141'>141</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! A toolkit for building command-line programs in Rust.</span>
 <span class='doccomment'>//!</span>
@@ -227,14 +236,17 @@
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>getopts</span>;
 <span class='kw'>use</span> <span class='ident'>getopts</span>::{<span class='ident'>Matches</span>, <span class='ident'>OptGroup</span>, <span class='ident'>getopts</span>, <span class='ident'>optflag</span>, <span class='ident'>short_usage</span>, <span class='ident'>usage</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>os</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>fs</span>;
 
 <span class='kw'>mod</span> <span class='ident'>test</span>;
 
-<span class='doccomment'>/// The name by which the executed program was called.</span>
+<span class='doccomment'>/// The file path of the executed program.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// Typically the file name or path of the invoked executable.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>argv0</span>() <span class='op'>-&gt;</span> <span class='ident'>String</span> {
-    <span class='ident'>os</span>::<span class='ident'>args</span>()[<span class='number'>0</span>].<span class='ident'>clone</span>()
+<span class='doccomment'>/// Typically the file path of the invoked executable. If the invocation target</span>
+<span class='doccomment'>/// is a symlink, then it will be resolved to the executable it links to.</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>exec_path</span>() <span class='op'>-&gt;</span> <span class='ident'>Path</span> {
+    <span class='kw'>let</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>Path</span>::<span class='ident'>new</span>(<span class='ident'>os</span>::<span class='ident'>args</span>()[<span class='number'>0</span>].<span class='ident'>clone</span>());
+    <span class='ident'>fs</span>::<span class='ident'>readlink</span>(<span class='kw-2'>&amp;</span><span class='ident'>path</span>).<span class='ident'>unwrap_or</span>(<span class='ident'>path</span>)
 }
 
 <span class='doccomment'>/// Construct a canonical usage string from a collection of `OptGroup`s.</span>
@@ -242,13 +254,15 @@
 <span class='doccomment'>/// Usage string format:</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>///```ignore</span>
-<span class='doccomment'>///     Usage: &lt;argv0&gt; [option synopsis]...</span>
+<span class='doccomment'>///     Usage: &lt;program name&gt; [option synopsis]...</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>///     Options:</span>
 <span class='doccomment'>///         [option description]...</span>
 <span class='doccomment'>///```</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>usage_string</span>(<span class='ident'>opts</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>OptGroup</span>]) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
-    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>usage</span>(<span class='ident'>short_usage</span>(<span class='ident'>argv0</span>().<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>).<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>))
+    <span class='kw'>let</span> <span class='ident'>exec_path</span> <span class='op'>=</span> <span class='ident'>exec_path</span>();
+    <span class='kw'>let</span> <span class='ident'>exec_path</span> <span class='op'>=</span> <span class='ident'>exec_path</span>.<span class='ident'>as_str</span>().<span class='ident'>unwrap_or_else</span>(<span class='op'>||</span> <span class='string'>&quot;&quot;</span>);
+    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>usage</span>(<span class='ident'>short_usage</span>(<span class='ident'>exec_path</span>, <span class='ident'>opts</span>).<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>))
 }
 
 <span class='doccomment'>/// Construct a version string.</span>
@@ -259,10 +273,10 @@
 <span class='doccomment'>/// Version string format:</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>///```ignore</span>
-<span class='doccomment'>///     &lt;argv0&gt; version &lt;version&gt;</span>
+<span class='doccomment'>///     &lt;program name&gt; version &lt;version&gt;</span>
 <span class='doccomment'>///```</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>version_string</span>(<span class='ident'>version</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
-    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{} version {}&quot;</span>, <span class='ident'>argv0</span>(), <span class='ident'>version</span>)
+    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{} version {}&quot;</span>, <span class='ident'>exec_path</span>().<span class='ident'>display</span>(), <span class='ident'>version</span>)
 }
 
 <span class='doccomment'>/// Parse the command-line arguments with which the program was executed</span>
@@ -303,7 +317,11 @@
 <span class='doccomment'>/// `--version`. `-v` and `-V` are avoided in order to prevent confusion in the</span>
 <span class='doccomment'>/// event when a flag is needed for enabling verbose output.</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>versionopt</span>() <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='ident'>optflag</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;version&quot;</span>, <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Print the version of {} being run&quot;</span>, <span class='ident'>argv0</span>()).<span class='ident'>as_slice</span>())
+    <span class='ident'>optflag</span>(
+        <span class='string'>&quot;&quot;</span>,
+        <span class='string'>&quot;version&quot;</span>,
+        <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Print the version of {} being run&quot;</span>, <span class='ident'>exec_path</span>().<span class='ident'>display</span>()).<span class='ident'>as_slice</span>()
+    )
 }
 </pre>
 </section>
