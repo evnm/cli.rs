@@ -52,14 +52,17 @@
 extern crate getopts;
 use getopts::{Matches, OptGroup, getopts, optflag, short_usage, usage};
 use std::{io, os};
+use std::io::fs;
 
 mod test;
 
-/// The name by which the executed program was called.
+/// The file path of the executed program.
 ///
-/// Typically the file name or path of the invoked executable.
-pub fn argv0() -> String {
-    os::args()[0].clone()
+/// Typically the file path of the invoked executable. If the invocation target
+/// is a symlink, then it will be resolved to the executable it links to.
+pub fn exec_path() -> Path {
+    let path = Path::new(os::args()[0].clone());
+    fs::readlink(&path).unwrap_or(path)
 }
 
 /// Construct a canonical usage string from a collection of `OptGroup`s.
@@ -67,13 +70,15 @@ pub fn argv0() -> String {
 /// Usage string format:
 ///
 ///```ignore
-///     Usage: <argv0> [option synopsis]...
+///     Usage: <program name> [option synopsis]...
 ///
 ///     Options:
 ///         [option description]...
 ///```
 pub fn usage_string(opts: &[OptGroup]) -> String {
-    format!("{}", usage(short_usage(argv0().as_slice(), opts).as_slice(), opts))
+    let exec_path = exec_path();
+    let exec_path = exec_path.as_str().unwrap_or_else(|| "");
+    format!("{}", usage(short_usage(exec_path, opts).as_slice(), opts))
 }
 
 /// Construct a version string.
@@ -84,10 +89,10 @@ pub fn usage_string(opts: &[OptGroup]) -> String {
 /// Version string format:
 ///
 ///```ignore
-///     <argv0> version <version>
+///     <program name> version <version>
 ///```
 pub fn version_string(version: &str) -> String {
-    format!("{} version {}", argv0(), version)
+    format!("{} version {}", exec_path().display(), version)
 }
 
 /// Parse the command-line arguments with which the program was executed
@@ -128,5 +133,9 @@ pub fn helpopt() -> OptGroup {
 /// `--version`. `-v` and `-V` are avoided in order to prevent confusion in the
 /// event when a flag is needed for enabling verbose output.
 pub fn versionopt() -> OptGroup {
-    optflag("", "version", format!("Print the version of {} being run", argv0()).as_slice())
+    optflag(
+        "",
+        "version",
+        format!("Print the version of {} being run", exec_path().display()).as_slice()
+    )
 }
