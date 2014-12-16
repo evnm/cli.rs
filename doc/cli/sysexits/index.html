@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>cli</a>::<wbr><a class='mod' href=''>sysexits</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-18' href='../../src/cli/lib.rs.html#93-126'>[src]</a></span></h1>
+        </span><a id='src-18' href='../../src/cli/lib.rs.html#97-130'>[src]</a></span></h1>
 <div class='docblock'><p>A collection of predefined exit codes cribbed from
 <a href="http://www.freebsd.org/cgi/man.cgi?query=sysexits">sysexits.h</a>.</p>
 
@@ -61,12 +61,15 @@ the failure class without looking up the source code.</p>
 <p>Intended for use with <code>std::os::set_exit_status</code> prior to process exit.</p>
 
 <h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1><pre class='rust '>
-<span class='kw'>fn</span> <span class='ident'>main</span>() {
-  ...
-  <span class='ident'>os</span>::<span class='ident'>set_exit_status</span>(<span class='ident'>cli</span>::<span class='ident'>sysexits</span>::<span class='ident'>USAGE</span>);
-  <span class='kw'>return</span>
-</pre>
+                           href="#example">Example</a></h1>
+<p>ignore<code>
+use std::os;
+fn main() {
+  // ...
+  os::set_exit_status(cli::sysexits::USAGE);
+  return;
+}
+</code></p>
 </div><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
 <table>
                     <tr>
