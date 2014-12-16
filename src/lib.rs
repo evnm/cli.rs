@@ -42,21 +42,23 @@
 //!             return;
 //!         }
 //!
-//!         ...
+//!         // ...
 //!     }
 //!
 //! When compiled to a binary named `foo`, this program emits the following output.
 //!
-//!     $ foo -h
-//!     Usage: foo [-h] [--version] [-o FILENAME]
+//! ```ignore
+//! $ foo -h
+//! Usage: foo [-h] [--version] [-o FILENAME]
 //!
-//!     Options:
-//!         -h --help           Print this help menu
-//!         --version           Print the version of target/cli being run
-//!         -o FILENAME         Set output file name
+//! Options:
+//!     -h --help           Print this help menu
+//!     --version           Print the version of target/cli being run
+//!     -o FILENAME         Set output file name
 //!
-//!     $ foo --version
-//!     foo version 0.0.1
+//! $ foo --version
+//! foo version 0.0.1
+//! ```
 
 #![crate_name = "cli"]
 #![experimental]
@@ -84,11 +86,13 @@ mod test;
 ///
 /// # Example
 ///
-/// ```
+/// ```ignore
+/// use std::os;
 /// fn main() {
-///   ...
+///   // ...
 ///   os::set_exit_status(cli::sysexits::USAGE);
-///   return
+///   return;
+/// }
 /// ```
 pub mod sysexits {
     /// Successful termination
