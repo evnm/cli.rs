@@ -61,15 +61,14 @@ the failure class without looking up the source code.</p>
 <p>Intended for use with <code>std::os::set_exit_status</code> prior to process exit.</p>
 
 <h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1>
-<p>ignore<code>
-use std::os;
-fn main() {
-  // ...
-  os::set_exit_status(cli::sysexits::USAGE);
-  return;
+                           href="#example">Example</a></h1><pre class='rust '>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>;
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+  <span class='comment'>// ...</span>
+  <span class='ident'>os</span>::<span class='ident'>set_exit_status</span>(<span class='ident'>cli</span>::<span class='ident'>sysexits</span>::<span class='ident'>USAGE</span>);
+  <span class='kw'>return</span>;
 }
-</code></p>
+</pre>
 </div><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
 <table>
                     <tr>
