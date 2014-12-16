@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `sysexits` mod in crate `cli`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, sysexits">
+
+    <title>cli::sysexits - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='../index.html'>cli</a></p><div class='block mod'><h2>Modules</h2><a class='mod current' href='../sysexits/index.html'>sysexits</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='../fn.exec_path.html'>exec_path</a><a class='fn ' href='../fn.helpopt.html'>helpopt</a><a class='fn ' href='../fn.parse_args.html'>parse_args</a><a class='fn ' href='../fn.usage_string.html'>usage_string</a><a class='fn ' href='../fn.version_string.html'>version_string</a><a class='fn ' href='../fn.versionopt.html'>versionopt</a></div>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>cli</a>::<wbr><a class='mod' href=''>sysexits</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]
+            </a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-18' href='../../src/cli/lib.rs.html#93-126'>[src]</a></span></h1>
+<div class='docblock'><p>A collection of predefined exit codes cribbed from
+<a href="http://www.freebsd.org/cgi/man.cgi?query=sysexits">sysexits.h</a>.</p>
+
+<p>From <code>sysexits.h</code>:</p>
+
+<blockquote>
+<p>According to style(9), it is not a good practice to call exit(3) with
+arbitrary values to indicate a failure condition when ending a
+program.  Instead, the pre-defined exit codes from sysexits should be
+used, so the caller of the process can get a rough estimation about
+the failure class without looking up the source code.</p>
+</blockquote>
+
+<p>Intended for use with <code>std::os::set_exit_status</code> prior to process exit.</p>
+
+<h1 id="example" class='section-header'><a
+                           href="#example">Example</a></h1><pre class='rust '>
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+  ...
+  <span class='ident'>os</span>::<span class='ident'>set_exit_status</span>(<span class='ident'>cli</span>::<span class='ident'>sysexits</span>::<span class='ident'>USAGE</span>);
+  <span class='kw'>return</span>
+</pre>
+</div><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
+<table>
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.CANT_CREAT.html'
+                               title='cli::sysexits::CANT_CREAT'>CANT_CREAT</a></td>
+                        <td class='docblock short'><p>Can&#39;t create (user) output file</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.CONFIG.html'
+                               title='cli::sysexits::CONFIG'>CONFIG</a></td>
+                        <td class='docblock short'><p>Configuration error</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.DATA_ERR.html'
+                               title='cli::sysexits::DATA_ERR'>DATA_ERR</a></td>
+                        <td class='docblock short'><p>Data format error</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.IO_ERR.html'
+                               title='cli::sysexits::IO_ERR'>IO_ERR</a></td>
+                        <td class='docblock short'><p>Input/output error</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_HOST.html'
+                               title='cli::sysexits::NO_HOST'>NO_HOST</a></td>
+                        <td class='docblock short'><p>Host name unknown</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_INPUT.html'
+                               title='cli::sysexits::NO_INPUT'>NO_INPUT</a></td>
+                        <td class='docblock short'><p>Cannot open input</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_PERM.html'
+                               title='cli::sysexits::NO_PERM'>NO_PERM</a></td>
+                        <td class='docblock short'><p>Permission denied</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_USER.html'
+                               title='cli::sysexits::NO_USER'>NO_USER</a></td>
+                        <td class='docblock short'><p>Addressee unknown</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.OK.html'
+                               title='cli::sysexits::OK'>OK</a></td>
+                        <td class='docblock short'><p>Successful termination</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.OS_ERR.html'
+                               title='cli::sysexits::OS_ERR'>OS_ERR</a></td>
+                        <td class='docblock short'><p>System error (e.g. can&#39;t fork)</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.OS_FILE.html'
+                               title='cli::sysexits::OS_FILE'>OS_FILE</a></td>
+                        <td class='docblock short'><p>Critical OS file missing</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.PROTOCOL.html'
+                               title='cli::sysexits::PROTOCOL'>PROTOCOL</a></td>
+                        <td class='docblock short'><p>Remote error in protocol</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.SOFTWARE_ERR.html'
+                               title='cli::sysexits::SOFTWARE_ERR'>SOFTWARE_ERR</a></td>
+                        <td class='docblock short'><p>Internal software error</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.TEMP_FAIL.html'
+                               title='cli::sysexits::TEMP_FAIL'>TEMP_FAIL</a></td>
+                        <td class='docblock short'><p>Temp failure; user is invited to retry</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.UNAVAILABLE.html'
+                               title='cli::sysexits::UNAVAILABLE'>UNAVAILABLE</a></td>
+                        <td class='docblock short'><p>Service unavailable</p>
+</td>
+                    </tr>
+                
+                    <tr>
+                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.USAGE.html'
+                               title='cli::sysexits::USAGE'>USAGE</a></td>
+                        <td class='docblock short'><p>Command line usage error</p>
+</td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "cli";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

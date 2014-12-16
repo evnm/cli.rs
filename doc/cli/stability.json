@@ -1,1 +1,1 @@
-{"name":"cli","counts":{"deprecated":0,"experimental":7,"unstable":0,"stable":0,"frozen":0,"locked":0,"unmarked":0},"submodules":[]}
+{"name":"cli","counts":{"deprecated":0,"experimental":24,"unstable":0,"stable":0,"frozen":0,"locked":0,"unmarked":0},"submodules":[{"name":"sysexits","counts":{"deprecated":0,"experimental":17,"unstable":0,"stable":0,"frozen":0,"locked":0,"unmarked":0},"submodules":[]}]}
