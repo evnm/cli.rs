@@ -69,6 +69,62 @@ use std::io::fs;
 
 mod test;
 
+/// A collection of predefined exit codes cribbed from
+/// [sysexits.h](http://www.freebsd.org/cgi/man.cgi?query=sysexits).
+///
+/// From `sysexits.h`:
+///
+/// > According to style(9), it is not a good practice to call exit(3) with
+/// > arbitrary values to indicate a failure condition when ending a
+/// > program.  Instead, the pre-defined exit codes from sysexits should be
+/// > used, so the caller of the process can get a rough estimation about
+/// > the failure class without looking up the source code.
+///
+/// Intended for use with `std::os::set_exit_status` prior to process exit.
+///
+/// # Example
+///
+/// ```
+/// fn main() {
+///   ...
+///   os::set_exit_status(cli::sysexits::USAGE);
+///   return
+/// ```
+pub mod sysexits {
+    /// Successful termination
+    pub const OK: int = 0;
+    /// Command line usage error
+    pub const USAGE: int = 64;
+    /// Data format error
+    pub const DATA_ERR: int = 65;
+    /// Cannot open input
+    pub const NO_INPUT: int = 66;
+    /// Addressee unknown
+    pub const NO_USER: int = 67;
+    /// Host name unknown
+    pub const NO_HOST: int = 68;
+    /// Service unavailable
+    pub const UNAVAILABLE: int = 6;
+    /// Internal software error
+    pub const SOFTWARE_ERR: int = 70;
+    /// System error (e.g. can't fork)
+    pub const OS_ERR: int = 71;
+    /// Critical OS file missing
+    pub const  OS_FILE: int = 72;
+    /// Can't create (user) output file
+    pub const CANT_CREAT: int = 73;
+    /// Input/output error
+    pub const IO_ERR: int = 74;
+    /// Temp failure; user is invited to retry
+    pub const TEMP_FAIL: int = 75;
+    /// Remote error in protocol
+    pub const PROTOCOL: int = 76;
+    /// Permission denied
+    pub const NO_PERM: int = 77;
+    /// Configuration error
+    pub const CONFIG: int = 78;
+}
+
 /// The file path of the executed program.
 ///
 /// Typically the file path of the invoked executable. If the invocation target
@@ -82,12 +138,12 @@ pub fn exec_path() -> Path {
 ///
 /// Usage string format:
 ///
-///```ignore
-///     Usage: <program name> [option synopsis]...
+/// ```ignore
+/// Usage: <program name> [option synopsis]...
 ///
-///     Options:
-///         [option description]...
-///```
+/// Options:
+///     [option description]...
+/// ```
 pub fn usage_string(opts: &[OptGroup]) -> String {
     let exec_path = exec_path();
     let exec_path = exec_path.as_str().unwrap_or_else(|| "");
@@ -101,9 +157,9 @@ pub fn usage_string(opts: &[OptGroup]) -> String {
 ///
 /// Version string format:
 ///
-///```ignore
-///     <program name> version <version>
-///```
+/// ```ignore
+/// <program name> version <version>
+/// ```
 pub fn version_string(version: &str) -> String {
     format!("{} version {}", exec_path().display(), version)
 }
