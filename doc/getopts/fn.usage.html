@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `version_string` fn in crate `cli`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, version_string">
+    <meta name="description" content="API documentation for the Rust `usage` fn in crate `getopts`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, usage">
 
-    <title>cli::version_string - Rust</title>
+    <title>getopts::usage - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../main.css">
 
-    
+    <link rel="shortcut icon" href="http://www.rust-lang.org/favicon.ico">
     
 </head>
 <body class="rustdoc">
@@ -25,8 +25,8 @@
     
 
     <section class="sidebar">
-        
-        <p class='location'><a href='index.html'>cli</a></p><div class='block mod'><h2>Modules</h2><a class='mod ' href='sysexits/index.html'>sysexits</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.exec_path.html'>exec_path</a><a class='fn ' href='fn.helpopt.html'>helpopt</a><a class='fn ' href='fn.parse_args.html'>parse_args</a><a class='fn ' href='fn.usage_string.html'>usage_string</a><a class='fn current' href='fn.version_string.html'>version_string</a><a class='fn ' href='fn.versionopt.html'>versionopt</a></div>
+        <a href='../getopts/index.html'><img src='http://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png' alt='' width='100'></a>
+        <p class='location'><a href='index.html'>getopts</a></p><div class='block struct'><h2>Structs</h2><a class='struct ' href='struct.Matches.html'>Matches</a><a class='struct ' href='struct.Opt.html'>Opt</a><a class='struct ' href='struct.OptGroup.html'>OptGroup</a></div><div class='block enum'><h2>Enums</h2><a class='enum ' href='enum.Fail.html'>Fail</a><a class='enum ' href='enum.FailType.html'>FailType</a><a class='enum ' href='enum.HasArg.html'>HasArg</a><a class='enum ' href='enum.Name.html'>Name</a><a class='enum ' href='enum.Occur.html'>Occur</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.getopts.html'>getopts</a><a class='fn ' href='fn.opt.html'>opt</a><a class='fn ' href='fn.optflag.html'>optflag</a><a class='fn ' href='fn.optflagmulti.html'>optflagmulti</a><a class='fn ' href='fn.optflagopt.html'>optflagopt</a><a class='fn ' href='fn.optmulti.html'>optmulti</a><a class='fn ' href='fn.optopt.html'>optopt</a><a class='fn ' href='fn.reqopt.html'>reqopt</a><a class='fn ' href='fn.short_usage.html'>short_usage</a><a class='fn current' href='fn.usage.html'>usage</a></div>
     </section>
 
     <nav class="sub">
@@ -41,19 +41,11 @@
     </nav>
 
     <section id='main' class="content fn">
-<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>cli</a>::<wbr><a class='fn' href=''>version_string</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>getopts</a>::<wbr><a class='fn' href=''>usage</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-169' href='../src/cli/lib.rs.html#167-169'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn version_string(version: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></pre><div class='docblock'><p>Construct a version string.</p>
-
-<p>Intended for use as output in response to <code>--version</code> as defined by
-<code>cli::versionopt</code>.</p>
-
-<p>Version string format:</p>
-<pre class='rust '>
-<span class='op'>&lt;</span><span class='ident'>program</span> <span class='ident'>name</span><span class='op'>&gt;</span> <span class='ident'>version</span> <span class='op'>&lt;</span><span class='ident'>version</span><span class='op'>&gt;</span>
-</pre>
+        </span><a id='src-4508' href='../src/getopts/lib.rs.html#685-767'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn usage(brief: &amp;<a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, opts: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='../getopts/struct.OptGroup.html' title='getopts::OptGroup'>OptGroup</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></pre><div class='docblock'><p>Derive a usage message from a set of long options.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 
@@ -94,7 +86,7 @@
 
     <script>
         window.rootPath = "../";
-        window.currentCrate = "cli";
+        window.currentCrate = "getopts";
         window.playgroundUrl = "";
     </script>
     <script src="../jquery.js"></script>
