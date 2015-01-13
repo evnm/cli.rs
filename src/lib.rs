@@ -96,37 +96,37 @@ mod test;
 /// ```
 pub mod sysexits {
     /// Successful termination
-    pub const OK: int = 0;
+    pub const OK: isize = 0;
     /// Command line usage error
-    pub const USAGE: int = 64;
+    pub const USAGE: isize = 64;
     /// Data format error
-    pub const DATA_ERR: int = 65;
+    pub const DATA_ERR: isize = 65;
     /// Cannot open input
-    pub const NO_INPUT: int = 66;
+    pub const NO_INPUT: isize = 66;
     /// Addressee unknown
-    pub const NO_USER: int = 67;
+    pub const NO_USER: isize = 67;
     /// Host name unknown
-    pub const NO_HOST: int = 68;
+    pub const NO_HOST: isize = 68;
     /// Service unavailable
-    pub const UNAVAILABLE: int = 6;
+    pub const UNAVAILABLE: isize = 6;
     /// Internal software error
-    pub const SOFTWARE_ERR: int = 70;
+    pub const SOFTWARE_ERR: isize = 70;
     /// System error (e.g. can't fork)
-    pub const OS_ERR: int = 71;
+    pub const OS_ERR: isize = 71;
     /// Critical OS file missing
-    pub const  OS_FILE: int = 72;
+    pub const  OS_FILE: isize = 72;
     /// Can't create (user) output file
-    pub const CANT_CREAT: int = 73;
+    pub const CANT_CREAT: isize = 73;
     /// Input/output error
-    pub const IO_ERR: int = 74;
+    pub const IO_ERR: isize = 74;
     /// Temp failure; user is invited to retry
-    pub const TEMP_FAIL: int = 75;
+    pub const TEMP_FAIL: isize = 75;
     /// Remote error in protocol
-    pub const PROTOCOL: int = 76;
+    pub const PROTOCOL: isize = 76;
     /// Permission denied
-    pub const NO_PERM: int = 77;
+    pub const NO_PERM: isize = 77;
     /// Configuration error
-    pub const CONFIG: int = 78;
+    pub const CONFIG: isize = 78;
 }
 
 /// The file path of the executed program.

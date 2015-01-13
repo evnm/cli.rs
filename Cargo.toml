@@ -8,7 +8,5 @@ repository = "https://github.com/evnm/cli.rs"
 license = "MIT"
 readme = "README.md"
 
-[[bin]]
-name = "cli"
-test = false
-doc = false
+[dependencies]
+getopts = "0.1.4"
