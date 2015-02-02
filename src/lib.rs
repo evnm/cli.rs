@@ -66,8 +66,8 @@
 
 extern crate getopts;
 use getopts::{Matches, OptGroup, getopts, optflag, short_usage, usage};
-use std::{io, os};
-use std::io::fs;
+use std::{old_io, os};
+use std::old_io::fs;
 
 mod test;
 
@@ -182,7 +182,7 @@ pub fn parse_args(opts: &[OptGroup]) -> Matches {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
-            match io::stderr().write_str(usage_string(opts).as_slice()) {
+            match old_io::stderr().write_str(usage_string(opts).as_slice()) {
                 Ok(()) => panic!(getopts_error.to_string()),
                 Err(write_error) =>
                     // Write to stderr failed -- panic with both error messages.
