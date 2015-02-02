@@ -25,16 +25,18 @@
 //!     extern crate cli;
 //!     extern crate getopts;
 //!
-//!     fn main() {
-//!         let opts = &[
-//!             cli::helpopt(),
-//!             cli::versionopt(),
-//!             getopts::optopt("o", "", "Set output file name", "FILENAME"),
-//!         ];
+//!     use getopts::Options;
 //!
-//!         let matches = cli::parse_args(opts);
+//!     fn main() {
+//!         let mut opts = Options::new();
+//!         cli::helpopt(&mut opts);
+//!         cli::versionopt(&mut opts);
+//!         opts.optopt("o", "", "Set output file name", "FILENAME");
+//!
+//!         let matches = cli::parse_args(&opts);
+//!
 //!         if matches.opt_present("h") {
-//!             println!("{}", cli::usage_string(opts));
+//!             println!("{}", cli::usage_string(&opts));
 //!             return;
 //!         }
 //!         if matches.opt_present("version") {
@@ -65,7 +67,7 @@
 #![crate_type="rlib"]
 
 extern crate getopts;
-use getopts::{Matches, OptGroup, getopts, optflag, short_usage, usage};
+use getopts::{Matches, Options};
 use std::{old_io, os};
 use std::old_io::fs;
 
@@ -138,7 +140,7 @@ pub fn exec_path() -> Path {
     fs::readlink(&path).unwrap_or(path)
 }
 
-/// Construct a canonical usage string from a collection of `OptGroup`s.
+/// Construct a canonical usage string from a collection of `Options`.
 ///
 /// Usage string format:
 ///
@@ -148,10 +150,10 @@ pub fn exec_path() -> Path {
 /// Options:
 ///     [option description]...
 /// ```
-pub fn usage_string(opts: &[OptGroup]) -> String {
+pub fn usage_string(opts: &Options) -> String {
     let exec_path = exec_path();
     let exec_path = exec_path.as_str().unwrap_or_else(|| "");
-    format!("{}", usage(short_usage(exec_path, opts).as_slice(), opts))
+    format!("{}", opts.usage(opts.short_usage(exec_path).as_slice()))
 }
 
 /// Construct a version string.
@@ -169,7 +171,7 @@ pub fn version_string(version: &str) -> String {
 }
 
 /// Parse the command-line arguments with which the program was executed
-/// according to a collection of `OptGroup`s.
+/// according to a collection of `Options`.
 ///
 /// Any flag parsing failure results in task panic. The program's usage string
 /// is printed to stderr prior to panic. Panic is induced in order to avoid
@@ -177,8 +179,8 @@ pub fn version_string(version: &str) -> String {
 /// of unrecognized flags or invalid flag values implies confusion on the part
 /// of the executor. While perhaps overbearing, it is preferable to halt
 /// execution abruptly than to continue with the risk of unwanted behavior.
-pub fn parse_args(opts: &[OptGroup]) -> Matches {
-    match getopts(os::args().tail(), opts) {
+pub fn parse_args(opts: &Options) -> Matches {
+    match opts.parse(os::args().tail()) {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
@@ -192,21 +194,21 @@ pub fn parse_args(opts: &[OptGroup]) -> Matches {
     }
 }
 
-/// Create a help flag `OptGroup`.
+/// Add a help flag to `Options`.
 ///
-/// The returned `OptGroup` is an optional long option for the input `-h`
+/// The flag added is an optional long option for the input `-h`
 /// and `--help`.
-pub fn helpopt() -> OptGroup {
-    optflag("h", "help", "Print this help menu")
+pub fn helpopt(opts: &mut Options) -> &mut Options {
+    opts.optflag("h", "help", "Print this help menu")
 }
 
-/// Create a version flag `OptGroup`.
+/// Add a version flag to `Options`.
 ///
-/// The returned `OptGroup` is an optional long option for the input
+/// The flag added is an optional long option for the input
 /// `--version`. `-v` and `-V` are avoided in order to prevent confusion in the
 /// event when a flag is needed for enabling verbose output.
-pub fn versionopt() -> OptGroup {
-    optflag(
+pub fn versionopt(opts: &mut Options) -> &mut Options {
+    opts.optflag(
         "",
         "version",
         format!("Print the version of {} being run", exec_path().display()).as_slice()
