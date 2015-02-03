@@ -12,8 +12,8 @@
 //! command-line output, defining flags, and (eventually) things like
 //! integrating with sysexits.
 //!
-//! It uses [getopts](http://doc.rust-lang.org/getopts/) for argument parsing
-//! and thus currently inherits `getopt`'s `experimental` stability level.
+//! > **Warning**: Though unmarked, this library should be considered unstable, in
+//! > part due to its usage of unstable language features.
 //!
 //! ## Usage
 //!
@@ -63,8 +63,12 @@
 //! ```
 
 #![crate_name = "cli"]
-#![experimental]
 #![crate_type="rlib"]
+
+#![feature(collections)]
+#![feature(io)]
+#![feature(os)]
+#![feature(path)]
 
 extern crate getopts;
 use getopts::{Matches, Options};
@@ -153,7 +157,7 @@ pub fn exec_path() -> Path {
 pub fn usage_string(opts: &Options) -> String {
     let exec_path = exec_path();
     let exec_path = exec_path.as_str().unwrap_or_else(|| "");
-    format!("{}", opts.usage(opts.short_usage(exec_path).as_slice()))
+    format!("{}", opts.usage(&opts.short_usage(exec_path)[]))
 }
 
 /// Construct a version string.
@@ -184,7 +188,7 @@ pub fn parse_args(opts: &Options) -> Matches {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
-            match old_io::stderr().write_str(usage_string(opts).as_slice()) {
+            match old_io::stderr().write_str(&usage_string(opts)[]) {
                 Ok(()) => panic!(getopts_error.to_string()),
                 Err(write_error) =>
                     // Write to stderr failed -- panic with both error messages.
@@ -211,6 +215,6 @@ pub fn versionopt(opts: &mut Options) -> &mut Options {
     opts.optflag(
         "",
         "version",
-        format!("Print the version of {} being run", exec_path().display()).as_slice()
+        &format!("Print the version of {} being run", exec_path().display())[]
     )
 }
