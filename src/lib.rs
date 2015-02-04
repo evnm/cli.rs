@@ -1,4 +1,4 @@
-//! A toolkit for building command-line programs in Rust.
+//! A toolkit for building Unix command-line programs in Rust.
 //!
 //! `cli` aims to
 //!
@@ -9,8 +9,7 @@
 //! - encourage appropriate use of exit statuses
 //!
 //! Concretely, `cli` is a collection of simple functions for formatting
-//! command-line output, defining flags, and (eventually) things like
-//! integrating with sysexits.
+//! command-line output, defining flags, and adhering to Unix conventions.
 //!
 //! > **Warning**: Though unmarked, this library should be considered unstable, in
 //! > part due to its usage of unstable language features.

@@ -1,6 +1,6 @@
 # cli.rs
 
-A toolkit for building command-line programs in Rust.
+A toolkit for building Unix command-line programs in Rust.
 
 `cli` aims to
 
@@ -11,12 +11,10 @@ A toolkit for building command-line programs in Rust.
 - encourage appropriate use of exit statuses
 
 Concretely, `cli` is a collection of simple functions for formatting
-command-line output, defining flags, and (eventually) things like
-integrating with sysexits.
+command-line output, defining flags, and adhering to Unix conventions.
 
-It uses [getopts](http://doc.rust-lang.org/getopts/) for argument
-parsing and thus currently inherits `getopt`'s `experimental`
-stability level.
+> **Warning**: Though unmarked, this library should be considered unstable, in
+> part due to its usage of unstable language features.
 
 ## Usage
 
@@ -28,16 +26,18 @@ an application framework.
     extern crate cli;
     extern crate getopts;
 
-    fn main() {
-        let opts = &[
-            cli::helpopt(),
-            cli::versionopt(),
-            getopts::optopt("o", "", "Set output file name", "FILENAME"),
-        ];
+    use getopts::Options;
 
-        let matches = cli::parse_args(opts);
+    fn main() {
+        let mut opts = Options::new();
+        cli::helpopt(&mut opts);
+        cli::versionopt(&mut opts);
+        opts.optopt("o", "", "Set output file name", "FILENAME");
+
+        let matches = cli::parse_args(&opts);
+
         if matches.opt_present("h") {
-            println!("{}", cli::usage_string(opts));
+            println!("{}", cli::usage_string(&opts));
             return;
         }
         if matches.opt_present("version") {
@@ -57,7 +57,6 @@ When compiled to a binary named `foo`, this program emits the following output.
         -h --help           Print this help menu
         --version           Print the version of target/cli being run
         -o FILENAME         Set output file name
-
     $ foo --version
     foo version 0.0.1
 
