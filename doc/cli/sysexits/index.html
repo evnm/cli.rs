@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='../index.html'>cli</a></p><div class='block mod'><h2>Modules</h2><a class='mod current' href='../sysexits/index.html'>sysexits</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='../fn.exec_path.html'>exec_path</a><a class='fn ' href='../fn.helpopt.html'>helpopt</a><a class='fn ' href='../fn.parse_args.html'>parse_args</a><a class='fn ' href='../fn.usage_string.html'>usage_string</a><a class='fn ' href='../fn.version_string.html'>version_string</a><a class='fn ' href='../fn.versionopt.html'>versionopt</a></div>
+        <p class='location'><a href='../index.html'>cli</a></p><div class='block mod'><h2>Modules</h2><a class='mod current' href='../sysexits/index.html' title='A collection of predefined exit codes cribbed from [sysexits.h](http://www.freebsd.org/cgi/man.cgi?query=sysexits).'>sysexits</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='../fn.exec_path.html' title='The file path of the executed program.'>exec_path</a><a class='fn ' href='../fn.helpopt.html' title='Add a help flag to `Options`.'>helpopt</a><a class='fn ' href='../fn.parse_args.html' title='Parse the command-line arguments with which the program was executed according to a collection of `Options`.'>parse_args</a><a class='fn ' href='../fn.usage_string.html' title='Construct a canonical usage string from a collection of `Options`.'>usage_string</a><a class='fn ' href='../fn.version_string.html' title='Construct a version string.'>version_string</a><a class='fn ' href='../fn.versionopt.html' title='Add a version flag to `Options`.'>versionopt</a></div>
     </section>
 
     <nav class="sub">
@@ -41,10 +41,10 @@
     </nav>
 
     <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>cli</a>::<wbr><a class='mod' href=''>sysexits</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>cli</a>::<wbr><a class='mod' href=''>sysexits</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-18' href='../../src/cli/lib.rs.html#97-130'>[src]</a></span></h1>
+        </span><a id='src-14' href='../../src/cli/lib.rs.html#102-135'>[src]</a></span></h1>
 <div class='docblock'><p>A collection of predefined exit codes cribbed from
 <a href="http://www.freebsd.org/cgi/man.cgi?query=sysexits">sysexits.h</a>.</p>
 
@@ -61,7 +61,7 @@ the failure class without looking up the source code.</p>
 <p>Intended for use with <code>std::os::set_exit_status</code> prior to process exit.</p>
 
 <h1 id="example" class='section-header'><a
-                           href="#example">Example</a></h1><pre class='rust '>
+                           href="#example">Example</a></h1><pre id='rust-example-rendered' class='rust '>
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>;
 <span class='kw'>fn</span> <span class='ident'>main</span>() {
   <span class='comment'>// ...</span>
@@ -72,112 +72,112 @@ the failure class without looking up the source code.</p>
 </div><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
 <table>
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.CANT_CREAT.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.CANT_CREAT.html'
                                title='cli::sysexits::CANT_CREAT'>CANT_CREAT</a></td>
                         <td class='docblock short'><p>Can&#39;t create (user) output file</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.CONFIG.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.CONFIG.html'
                                title='cli::sysexits::CONFIG'>CONFIG</a></td>
                         <td class='docblock short'><p>Configuration error</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.DATA_ERR.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.DATA_ERR.html'
                                title='cli::sysexits::DATA_ERR'>DATA_ERR</a></td>
                         <td class='docblock short'><p>Data format error</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.IO_ERR.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.IO_ERR.html'
                                title='cli::sysexits::IO_ERR'>IO_ERR</a></td>
                         <td class='docblock short'><p>Input/output error</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_HOST.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.NO_HOST.html'
                                title='cli::sysexits::NO_HOST'>NO_HOST</a></td>
                         <td class='docblock short'><p>Host name unknown</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_INPUT.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.NO_INPUT.html'
                                title='cli::sysexits::NO_INPUT'>NO_INPUT</a></td>
                         <td class='docblock short'><p>Cannot open input</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_PERM.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.NO_PERM.html'
                                title='cli::sysexits::NO_PERM'>NO_PERM</a></td>
                         <td class='docblock short'><p>Permission denied</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.NO_USER.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.NO_USER.html'
                                title='cli::sysexits::NO_USER'>NO_USER</a></td>
                         <td class='docblock short'><p>Addressee unknown</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.OK.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.OK.html'
                                title='cli::sysexits::OK'>OK</a></td>
                         <td class='docblock short'><p>Successful termination</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.OS_ERR.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.OS_ERR.html'
                                title='cli::sysexits::OS_ERR'>OS_ERR</a></td>
                         <td class='docblock short'><p>System error (e.g. can&#39;t fork)</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.OS_FILE.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.OS_FILE.html'
                                title='cli::sysexits::OS_FILE'>OS_FILE</a></td>
                         <td class='docblock short'><p>Critical OS file missing</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.PROTOCOL.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.PROTOCOL.html'
                                title='cli::sysexits::PROTOCOL'>PROTOCOL</a></td>
                         <td class='docblock short'><p>Remote error in protocol</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.SOFTWARE_ERR.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.SOFTWARE_ERR.html'
                                title='cli::sysexits::SOFTWARE_ERR'>SOFTWARE_ERR</a></td>
                         <td class='docblock short'><p>Internal software error</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.TEMP_FAIL.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.TEMP_FAIL.html'
                                title='cli::sysexits::TEMP_FAIL'>TEMP_FAIL</a></td>
                         <td class='docblock short'><p>Temp failure; user is invited to retry</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.UNAVAILABLE.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.UNAVAILABLE.html'
                                title='cli::sysexits::UNAVAILABLE'>UNAVAILABLE</a></td>
                         <td class='docblock short'><p>Service unavailable</p>
 </td>
                     </tr>
                 
                     <tr>
-                        <td><a class='stability Experimental' title='Experimental'></a><a class='constant' href='constant.USAGE.html'
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='constant' href='constant.USAGE.html'
                                title='cli::sysexits::USAGE'>USAGE</a></td>
                         <td class='docblock short'><p>Command line usage error</p>
 </td>

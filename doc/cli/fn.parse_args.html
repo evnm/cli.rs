@@ -26,7 +26,7 @@
 
     <section class="sidebar">
         
-        <p class='location'><a href='index.html'>cli</a></p><div class='block mod'><h2>Modules</h2><a class='mod ' href='sysexits/index.html'>sysexits</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.exec_path.html'>exec_path</a><a class='fn ' href='fn.helpopt.html'>helpopt</a><a class='fn current' href='fn.parse_args.html'>parse_args</a><a class='fn ' href='fn.usage_string.html'>usage_string</a><a class='fn ' href='fn.version_string.html'>version_string</a><a class='fn ' href='fn.versionopt.html'>versionopt</a></div>
+        <p class='location'><a href='index.html'>cli</a></p><div class='block mod'><h2>Modules</h2><a class='mod ' href='sysexits/index.html' title='A collection of predefined exit codes cribbed from [sysexits.h](http://www.freebsd.org/cgi/man.cgi?query=sysexits).'>sysexits</a></div><div class='block fn'><h2>Functions</h2><a class='fn ' href='fn.exec_path.html' title='The file path of the executed program.'>exec_path</a><a class='fn ' href='fn.helpopt.html' title='Add a help flag to `Options`.'>helpopt</a><a class='fn current' href='fn.parse_args.html' title='Parse the command-line arguments with which the program was executed according to a collection of `Options`.'>parse_args</a><a class='fn ' href='fn.usage_string.html' title='Construct a canonical usage string from a collection of `Options`.'>usage_string</a><a class='fn ' href='fn.version_string.html' title='Construct a version string.'>version_string</a><a class='fn ' href='fn.versionopt.html' title='Add a version flag to `Options`.'>versionopt</a></div>
     </section>
 
     <nav class="sub">
@@ -41,12 +41,12 @@
     </nav>
 
     <section id='main' class="content fn">
-<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>cli</a>::<wbr><a class='fn' href=''>parse_args</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>cli</a>::<wbr><a class='fn' href=''>parse_args</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-220' href='../src/cli/lib.rs.html#180-193'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn parse_args(opts: <a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='struct' href='../getopts/struct.OptGroup.html' title='getopts::OptGroup'>OptGroup</a><a href='http://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>) -&gt; <a class='struct' href='../getopts/struct.Matches.html' title='getopts::Matches'>Matches</a></pre><div class='docblock'><p>Parse the command-line arguments with which the program was executed
-according to a collection of <code>OptGroup</code>s.</p>
+        </span><a id='src-214' href='../src/cli/lib.rs.html#185-198'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn parse_args(opts: &amp;<a class='struct' href='../getopts/struct.Options.html' title='getopts::Options'>Options</a>) -&gt; <a class='struct' href='../getopts/struct.Matches.html' title='getopts::Matches'>Matches</a></pre><div class='docblock'><p>Parse the command-line arguments with which the program was executed
+according to a collection of <code>Options</code>.</p>
 
 <p>Any flag parsing failure results in task panic. The program&#39;s usage string
 is printed to stderr prior to panic. Panic is induced in order to avoid

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/evanm/.cargo/registry/src/github.com-1ecc6299db9ec823/getopts-0.1.4/src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/evanm/.cargo/registry/src/github.com-1ecc6299db9ec823/getopts-0.2.0/src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -1624,6 +1624,63 @@
 <span id="1582">1582</span>
 <span id="1583">1583</span>
 <span id="1584">1584</span>
+<span id="1585">1585</span>
+<span id="1586">1586</span>
+<span id="1587">1587</span>
+<span id="1588">1588</span>
+<span id="1589">1589</span>
+<span id="1590">1590</span>
+<span id="1591">1591</span>
+<span id="1592">1592</span>
+<span id="1593">1593</span>
+<span id="1594">1594</span>
+<span id="1595">1595</span>
+<span id="1596">1596</span>
+<span id="1597">1597</span>
+<span id="1598">1598</span>
+<span id="1599">1599</span>
+<span id="1600">1600</span>
+<span id="1601">1601</span>
+<span id="1602">1602</span>
+<span id="1603">1603</span>
+<span id="1604">1604</span>
+<span id="1605">1605</span>
+<span id="1606">1606</span>
+<span id="1607">1607</span>
+<span id="1608">1608</span>
+<span id="1609">1609</span>
+<span id="1610">1610</span>
+<span id="1611">1611</span>
+<span id="1612">1612</span>
+<span id="1613">1613</span>
+<span id="1614">1614</span>
+<span id="1615">1615</span>
+<span id="1616">1616</span>
+<span id="1617">1617</span>
+<span id="1618">1618</span>
+<span id="1619">1619</span>
+<span id="1620">1620</span>
+<span id="1621">1621</span>
+<span id="1622">1622</span>
+<span id="1623">1623</span>
+<span id="1624">1624</span>
+<span id="1625">1625</span>
+<span id="1626">1626</span>
+<span id="1627">1627</span>
+<span id="1628">1628</span>
+<span id="1629">1629</span>
+<span id="1630">1630</span>
+<span id="1631">1631</span>
+<span id="1632">1632</span>
+<span id="1633">1633</span>
+<span id="1634">1634</span>
+<span id="1635">1635</span>
+<span id="1636">1636</span>
+<span id="1637">1637</span>
+<span id="1638">1638</span>
+<span id="1639">1639</span>
+<span id="1640">1640</span>
+<span id="1641">1641</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2012-2014 The Rust Project Developers. See the COPYRIGHT</span>
 <span class='comment'>// file at the top-level directory of this distribution and at</span>
@@ -1661,7 +1718,7 @@
 <span class='doccomment'>//! ```{.rust}</span>
 <span class='doccomment'>//! # #![allow(unstable)]</span>
 <span class='doccomment'>//! extern crate getopts;</span>
-<span class='doccomment'>//! use getopts::{optopt,optflag,getopts,OptGroup,usage};</span>
+<span class='doccomment'>//! use getopts::Options;</span>
 <span class='doccomment'>//! use std::os;</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! fn do_work(inp: &amp;str, out: Option&lt;String&gt;) {</span>
@@ -1672,21 +1729,19 @@
 <span class='doccomment'>//!     }</span>
 <span class='doccomment'>//! }</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! fn print_usage(program: &amp;str, opts: &amp;[OptGroup]) {</span>
+<span class='doccomment'>//! fn print_usage(program: &amp;str, opts: Options) {</span>
 <span class='doccomment'>//!     let brief = format!(&quot;Usage: {} [options]&quot;, program);</span>
-<span class='doccomment'>//!     print!(&quot;{}&quot;, usage(brief.as_slice(), opts));</span>
+<span class='doccomment'>//!     print!(&quot;{}&quot;, opts.usage(brief.as_slice()));</span>
 <span class='doccomment'>//! }</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! fn main() {</span>
 <span class='doccomment'>//!     let args: Vec&lt;String&gt; = os::args();</span>
-<span class='doccomment'>//!</span>
 <span class='doccomment'>//!     let program = args[0].clone();</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//!     let opts = &amp;[</span>
-<span class='doccomment'>//!         optopt(&quot;o&quot;, &quot;&quot;, &quot;set output file name&quot;, &quot;NAME&quot;),</span>
-<span class='doccomment'>//!         optflag(&quot;h&quot;, &quot;help&quot;, &quot;print this help menu&quot;)</span>
-<span class='doccomment'>//!     ];</span>
-<span class='doccomment'>//!     let matches = match getopts(args.tail(), opts) {</span>
+<span class='doccomment'>//!     let mut opts = Options::new();</span>
+<span class='doccomment'>//!     opts.optopt(&quot;o&quot;, &quot;&quot;, &quot;set output file name&quot;, &quot;NAME&quot;);</span>
+<span class='doccomment'>//!     opts.optflag(&quot;h&quot;, &quot;help&quot;, &quot;print this help menu&quot;);</span>
+<span class='doccomment'>//!     let matches = match opts.parse(args.tail()) {</span>
 <span class='doccomment'>//!         Ok(m) =&gt; { m }</span>
 <span class='doccomment'>//!         Err(f) =&gt; { panic!(f.to_string()) }</span>
 <span class='doccomment'>//!     };</span>
@@ -1710,6 +1765,7 @@
        <span class='ident'>html_root_url</span> <span class='op'>=</span> <span class='string'>&quot;http://doc.rust-lang.org/getopts/&quot;</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>deny</span>(<span class='ident'>missing_docs</span>)]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>allow</span>(<span class='ident'>unstable</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>cfg_attr</span>(<span class='ident'>test</span>, <span class='ident'>deny</span>(<span class='ident'>warnings</span>))]</span>
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span> <span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>log</span>;
 
@@ -1726,9 +1782,276 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>iter</span>::<span class='ident'>repeat</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>result</span>;
 
+<span class='doccomment'>/// A description of the options that a program can handle</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Options</span> {
+    <span class='ident'>grps</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>OptGroup</span><span class='op'>&gt;</span>
+}
+
+<span class='kw'>impl</span> <span class='ident'>Options</span> {
+    <span class='doccomment'>/// Create a blank set of options</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='ident'>Options</span> {
+        <span class='ident'>Options</span> {
+            <span class='ident'>grps</span>: <span class='ident'>Vec</span>::<span class='ident'>new</span>()
+        }
+    }
+
+    <span class='doccomment'>/// Create a generic option group, stating all parameters explicitly</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>opt</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>,
+                       <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hasarg</span>: <span class='ident'>HasArg</span>, <span class='ident'>occur</span>: <span class='ident'>Occur</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+        <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
+        <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>push</span>(<span class='ident'>OptGroup</span> {
+            <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hasarg</span>: <span class='ident'>hasarg</span>,
+            <span class='ident'>occur</span>: <span class='ident'>occur</span>
+        });
+        <span class='self'>self</span>
+    }
+
+    <span class='doccomment'>/// Create a long option that is optional and does not take an argument.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `desc` - Description for usage help</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optflag</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
+                           <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+        <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
+        <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>push</span>(<span class='ident'>OptGroup</span> {
+            <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hint</span>: <span class='string'>&quot;&quot;</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hasarg</span>: <span class='ident'>No</span>,
+            <span class='ident'>occur</span>: <span class='ident'>Optional</span>
+        });
+        <span class='self'>self</span>
+    }
+
+    <span class='doccomment'>/// Create a long option that can occur more than once and does not</span>
+    <span class='doccomment'>/// take an argument.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `desc` - Description for usage help</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optflagmulti</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
+                                <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+        <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
+        <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>push</span>(<span class='ident'>OptGroup</span> {
+            <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hint</span>: <span class='string'>&quot;&quot;</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hasarg</span>: <span class='ident'>No</span>,
+            <span class='ident'>occur</span>: <span class='ident'>Multi</span>
+        });
+        <span class='self'>self</span>
+    }
+
+    <span class='doccomment'>/// Create a long option that is optional and takes an optional argument.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `desc` - Description for usage help</span>
+    <span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
+    <span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optflagopt</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>,
+                              <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+        <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
+        <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>push</span>(<span class='ident'>OptGroup</span> {
+            <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hasarg</span>: <span class='ident'>Maybe</span>,
+            <span class='ident'>occur</span>: <span class='ident'>Optional</span>
+        });
+        <span class='self'>self</span>
+    }
+
+    <span class='doccomment'>/// Create a long option that is optional, takes an argument, and may occur</span>
+    <span class='doccomment'>/// multiple times.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `desc` - Description for usage help</span>
+    <span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
+    <span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optmulti</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
+                            <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+        <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
+        <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>push</span>(<span class='ident'>OptGroup</span> {
+            <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hasarg</span>: <span class='ident'>Yes</span>,
+            <span class='ident'>occur</span>: <span class='ident'>Multi</span>
+        });
+        <span class='self'>self</span>
+    }
+
+    <span class='doccomment'>/// Create a long option that is optional and takes an argument.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `desc` - Description for usage help</span>
+    <span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
+    <span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optopt</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
+                          <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+        <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
+        <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>push</span>(<span class='ident'>OptGroup</span> {
+            <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hasarg</span>: <span class='ident'>Yes</span>,
+            <span class='ident'>occur</span>: <span class='ident'>Optional</span>
+        });
+        <span class='self'>self</span>
+    }
+
+    <span class='doccomment'>/// Create a long option that is required and takes an argument.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
+    <span class='doccomment'>/// * `desc` - Description for usage help</span>
+    <span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
+    <span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>reqopt</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>)
+                          <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+        <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
+        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
+        <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>push</span>(<span class='ident'>OptGroup</span> {
+            <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
+            <span class='ident'>hasarg</span>: <span class='ident'>Yes</span>,
+            <span class='ident'>occur</span>: <span class='ident'>Req</span>
+        });
+        <span class='self'>self</span>
+    }
+
+    <span class='doccomment'>/// Parse command line arguments according to the provided options.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// On success returns `Ok(Matches)`. Use methods such as `opt_present`</span>
+    <span class='doccomment'>/// `opt_str`, etc. to interrogate results.</span>
+    <span class='doccomment'>/// # Panics</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// Returns `Err(Fail)` on failure: use the `Show` implementation of `Fail` to display</span>
+    <span class='doccomment'>/// information about it.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>args</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>String</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span> {
+        <span class='ident'>getopts</span>(<span class='ident'>args</span>, <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>as_slice</span>())
+    }
+
+    <span class='doccomment'>/// Derive a short one-line usage summary from a set of long options.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>short_usage</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>program_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>line</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Usage: {} &quot;</span>, <span class='ident'>program_name</span>);
+        <span class='ident'>line</span>.<span class='ident'>push_str</span>(<span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>iter</span>()
+                          .<span class='ident'>map</span>(<span class='ident'>format_option</span>)
+                          .<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span>()
+                          .<span class='ident'>connect</span>(<span class='string'>&quot; &quot;</span>)
+                          .<span class='ident'>as_slice</span>());
+        <span class='ident'>line</span>
+    }
+
+    <span class='doccomment'>/// Derive a usage message from a set of long options.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>usage</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>brief</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
+        <span class='kw'>let</span> <span class='ident'>desc_sep</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;\n{}&quot;</span>, <span class='ident'>repeat</span>(<span class='string'>&quot; &quot;</span>).<span class='ident'>take</span>(<span class='number'>24</span>).<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>());
+
+        <span class='kw'>let</span> <span class='ident'>rows</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>grps</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>optref</span><span class='op'>|</span> {
+            <span class='kw'>let</span> <span class='ident'>OptGroup</span>{<span class='ident'>short_name</span>,
+                         <span class='ident'>long_name</span>,
+                         <span class='ident'>hint</span>,
+                         <span class='ident'>desc</span>,
+                         <span class='ident'>hasarg</span>,
+                         ..} <span class='op'>=</span> (<span class='op'>*</span><span class='ident'>optref</span>).<span class='ident'>clone</span>();
+
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>row</span> <span class='op'>=</span> <span class='string'>&quot;    &quot;</span>.<span class='ident'>to_string</span>();
+
+            <span class='comment'>// short option</span>
+            <span class='kw'>match</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>() {
+                <span class='number'>0</span> <span class='op'>=&gt;</span> {}
+                <span class='number'>1</span> <span class='op'>=&gt;</span> {
+                    <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39;-&#39;</span>);
+                    <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>short_name</span>.<span class='ident'>as_slice</span>());
+                    <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
+                }
+                _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;the short name should only be 1 ascii char long&quot;</span>),
+            }
+
+            <span class='comment'>// long option</span>
+            <span class='kw'>match</span> <span class='ident'>long_name</span>.<span class='ident'>len</span>() {
+                <span class='number'>0</span> <span class='op'>=&gt;</span> {}
+                _ <span class='op'>=&gt;</span> {
+                    <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;--&quot;</span>);
+                    <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>long_name</span>.<span class='ident'>as_slice</span>());
+                    <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
+                }
+            }
+
+            <span class='comment'>// arg</span>
+            <span class='kw'>match</span> <span class='ident'>hasarg</span> {
+                <span class='ident'>No</span> <span class='op'>=&gt;</span> {}
+                <span class='ident'>Yes</span> <span class='op'>=&gt;</span> <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>hint</span>.<span class='ident'>as_slice</span>()),
+                <span class='ident'>Maybe</span> <span class='op'>=&gt;</span> {
+                    <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39;[&#39;</span>);
+                    <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>hint</span>.<span class='ident'>as_slice</span>());
+                    <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39;]&#39;</span>);
+                }
+            }
+
+            <span class='comment'>// FIXME: #5516 should be graphemes not codepoints</span>
+            <span class='comment'>// here we just need to indent the start of the description</span>
+            <span class='kw'>let</span> <span class='ident'>rowlen</span> <span class='op'>=</span> <span class='ident'>row</span>.<span class='ident'>chars</span>().<span class='ident'>count</span>();
+            <span class='kw'>if</span> <span class='ident'>rowlen</span> <span class='op'>&lt;</span> <span class='number'>24</span> {
+                <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='ident'>range</span>(<span class='number'>0</span>, <span class='number'>24</span> <span class='op'>-</span> <span class='ident'>rowlen</span>) {
+                    <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
+                }
+            } <span class='kw'>else</span> {
+                <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>desc_sep</span>.<span class='ident'>as_slice</span>())
+            }
+
+            <span class='comment'>// Normalize desc to contain words separated by one space character</span>
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>desc_normalized_whitespace</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>new</span>();
+            <span class='kw'>for</span> <span class='ident'>word</span> <span class='kw'>in</span> <span class='ident'>desc</span>.<span class='ident'>words</span>() {
+                <span class='ident'>desc_normalized_whitespace</span>.<span class='ident'>push_str</span>(<span class='ident'>word</span>);
+                <span class='ident'>desc_normalized_whitespace</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
+            }
+
+            <span class='comment'>// FIXME: #5516 should be graphemes not codepoints</span>
+            <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>desc_rows</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
+            <span class='ident'>each_split_within</span>(<span class='ident'>desc_normalized_whitespace</span>.<span class='ident'>as_slice</span>(),
+                              <span class='number'>54</span>,
+                              <span class='op'>|</span><span class='ident'>substr</span><span class='op'>|</span> {
+                <span class='ident'>desc_rows</span>.<span class='ident'>push</span>(<span class='ident'>substr</span>.<span class='ident'>to_string</span>());
+                <span class='boolval'>true</span>
+            });
+
+            <span class='comment'>// FIXME: #5516 should be graphemes not codepoints</span>
+            <span class='comment'>// wrapped description</span>
+            <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>desc_rows</span>.<span class='ident'>connect</span>(<span class='ident'>desc_sep</span>.<span class='ident'>as_slice</span>()).<span class='ident'>as_slice</span>());
+
+            <span class='ident'>row</span>
+        });
+
+        <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}\n\nOptions:\n{}\n&quot;</span>, <span class='ident'>brief</span>,
+                <span class='ident'>rows</span>.<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span>().<span class='ident'>connect</span>(<span class='string'>&quot;\n&quot;</span>))
+    }
+}
+
 <span class='doccomment'>/// Name of an option. Either a string or a single char.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Eq</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Name</span> {
+<span class='kw'>enum</span> <span class='ident'>Name</span> {
     <span class='doccomment'>/// A string representing the long name of an option.</span>
     <span class='doccomment'>/// For example: &quot;help&quot;</span>
     <span class='ident'>Long</span>(<span class='ident'>String</span>),
@@ -1765,33 +2088,33 @@
 
 <span class='doccomment'>/// A description of a possible option.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Eq</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Opt</span> {
+<span class='kw'>struct</span> <span class='ident'>Opt</span> {
     <span class='doccomment'>/// Name of the option</span>
-    <span class='kw'>pub</span> <span class='ident'>name</span>: <span class='ident'>Name</span>,
+    <span class='ident'>name</span>: <span class='ident'>Name</span>,
     <span class='doccomment'>/// Whether it has an argument</span>
-    <span class='kw'>pub</span> <span class='ident'>hasarg</span>: <span class='ident'>HasArg</span>,
+    <span class='ident'>hasarg</span>: <span class='ident'>HasArg</span>,
     <span class='doccomment'>/// How often it can occur</span>
-    <span class='kw'>pub</span> <span class='ident'>occur</span>: <span class='ident'>Occur</span>,
+    <span class='ident'>occur</span>: <span class='ident'>Occur</span>,
     <span class='doccomment'>/// Which options it aliases</span>
-    <span class='kw'>pub</span> <span class='ident'>aliases</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Opt</span><span class='op'>&gt;</span>,
+    <span class='ident'>aliases</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Opt</span><span class='op'>&gt;</span>,
 }
 
 <span class='doccomment'>/// One group of options, e.g., both `-h` and `--help`, along with</span>
 <span class='doccomment'>/// their shared description and properties.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Clone</span>, <span class='ident'>PartialEq</span>, <span class='ident'>Eq</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>OptGroup</span> {
+<span class='kw'>struct</span> <span class='ident'>OptGroup</span> {
     <span class='doccomment'>/// Short name of the option, e.g. `h` for a `-h` option</span>
-    <span class='kw'>pub</span> <span class='ident'>short_name</span>: <span class='ident'>String</span>,
+    <span class='ident'>short_name</span>: <span class='ident'>String</span>,
     <span class='doccomment'>/// Long name of the option, e.g. `help` for a `--help` option</span>
-    <span class='kw'>pub</span> <span class='ident'>long_name</span>: <span class='ident'>String</span>,
+    <span class='ident'>long_name</span>: <span class='ident'>String</span>,
     <span class='doccomment'>/// Hint for argument, e.g. `FILE` for a `-o FILE` option</span>
-    <span class='kw'>pub</span> <span class='ident'>hint</span>: <span class='ident'>String</span>,
+    <span class='ident'>hint</span>: <span class='ident'>String</span>,
     <span class='doccomment'>/// Description for usage help text</span>
-    <span class='kw'>pub</span> <span class='ident'>desc</span>: <span class='ident'>String</span>,
+    <span class='ident'>desc</span>: <span class='ident'>String</span>,
     <span class='doccomment'>/// Whether option has an argument</span>
-    <span class='kw'>pub</span> <span class='ident'>hasarg</span>: <span class='ident'>HasArg</span>,
+    <span class='ident'>hasarg</span>: <span class='ident'>HasArg</span>,
     <span class='doccomment'>/// How often it can occur</span>
-    <span class='kw'>pub</span> <span class='ident'>occur</span>: <span class='ident'>Occur</span>
+    <span class='ident'>occur</span>: <span class='ident'>Occur</span>
 }
 
 <span class='doccomment'>/// Describes whether an option is given at all or has a value.</span>
@@ -1866,7 +2189,7 @@
 <span class='kw'>impl</span> <span class='ident'>OptGroup</span> {
     <span class='doccomment'>/// Translate OptGroup into Opt.</span>
     <span class='doccomment'>/// (Both short and long names correspond to different Opts).</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>long_to_short</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Opt</span> {
+    <span class='kw'>fn</span> <span class='ident'>long_to_short</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Opt</span> {
         <span class='kw'>let</span> <span class='ident'>OptGroup</span> {
             <span class='ident'>short_name</span>,
             <span class='ident'>long_name</span>,
@@ -2008,143 +2331,6 @@
     <span class='prelude-val'>None</span>
 }
 
-<span class='doccomment'>/// Create a long option that is required and takes an argument.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `desc` - Description for usage help</span>
-<span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
-<span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>reqopt</span>(<span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
-    <span class='ident'>OptGroup</span> {
-        <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hasarg</span>: <span class='ident'>Yes</span>,
-        <span class='ident'>occur</span>: <span class='ident'>Req</span>
-    }
-}
-
-<span class='doccomment'>/// Create a long option that is optional and takes an argument.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `desc` - Description for usage help</span>
-<span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
-<span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optopt</span>(<span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
-    <span class='ident'>OptGroup</span> {
-        <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hasarg</span>: <span class='ident'>Yes</span>,
-        <span class='ident'>occur</span>: <span class='ident'>Optional</span>
-    }
-}
-
-<span class='doccomment'>/// Create a long option that is optional and does not take an argument.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `desc` - Description for usage help</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optflag</span>(<span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
-    <span class='ident'>OptGroup</span> {
-        <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hint</span>: <span class='string'>&quot;&quot;</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hasarg</span>: <span class='ident'>No</span>,
-        <span class='ident'>occur</span>: <span class='ident'>Optional</span>
-    }
-}
-
-<span class='doccomment'>/// Create a long option that can occur more than once and does not</span>
-<span class='doccomment'>/// take an argument.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `desc` - Description for usage help</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optflagmulti</span>(<span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
-    <span class='ident'>OptGroup</span> {
-        <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hint</span>: <span class='string'>&quot;&quot;</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hasarg</span>: <span class='ident'>No</span>,
-        <span class='ident'>occur</span>: <span class='ident'>Multi</span>
-    }
-}
-
-<span class='doccomment'>/// Create a long option that is optional and takes an optional argument.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `desc` - Description for usage help</span>
-<span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
-<span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optflagopt</span>(<span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
-    <span class='ident'>OptGroup</span> {
-        <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hasarg</span>: <span class='ident'>Maybe</span>,
-        <span class='ident'>occur</span>: <span class='ident'>Optional</span>
-    }
-}
-
-<span class='doccomment'>/// Create a long option that is optional, takes an argument, and may occur</span>
-<span class='doccomment'>/// multiple times.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * `short_name` - e.g. `&quot;h&quot;` for a `-h` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `long_name` - e.g. `&quot;help&quot;` for a `--help` option, or `&quot;&quot;` for none</span>
-<span class='doccomment'>/// * `desc` - Description for usage help</span>
-<span class='doccomment'>/// * `hint` - Hint that is used in place of the argument in the usage help,</span>
-<span class='doccomment'>///   e.g. `&quot;FILE&quot;` for a `-o FILE` option</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>optmulti</span>(<span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
-    <span class='ident'>OptGroup</span> {
-        <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hasarg</span>: <span class='ident'>Yes</span>,
-        <span class='ident'>occur</span>: <span class='ident'>Multi</span>
-    }
-}
-
-<span class='doccomment'>/// Create a generic option group, stating all parameters explicitly</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>opt</span>(<span class='ident'>short_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>,
-           <span class='ident'>long_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>,
-           <span class='ident'>desc</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>,
-           <span class='ident'>hint</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>,
-           <span class='ident'>hasarg</span>: <span class='ident'>HasArg</span>,
-           <span class='ident'>occur</span>: <span class='ident'>Occur</span>) <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>();
-    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>len</span> <span class='op'>==</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span>);
-    <span class='ident'>OptGroup</span> {
-        <span class='ident'>short_name</span>: <span class='ident'>short_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>long_name</span>: <span class='ident'>long_name</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hint</span>: <span class='ident'>hint</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>desc</span>: <span class='ident'>desc</span>.<span class='ident'>to_string</span>(),
-        <span class='ident'>hasarg</span>: <span class='ident'>hasarg</span>,
-        <span class='ident'>occur</span>: <span class='ident'>occur</span>
-    }
-}
-
 <span class='kw'>impl</span> <span class='ident'>Fail</span> {
     <span class='doccomment'>/// Convert a `Fail` enum into an error string.</span>
     <span class='attribute'>#[<span class='ident'>deprecated</span><span class='op'>=</span><span class='string'>&quot;use `Show` (`{}` format specifier)&quot;</span>]</span>
@@ -2153,7 +2339,7 @@
     }
 }
 
-<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>String</span> <span class='kw'>for</span> <span class='ident'>Fail</span> {
+<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Display</span> <span class='kw'>for</span> <span class='ident'>Fail</span> {
     <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
         <span class='kw'>match</span> <span class='op'>*</span><span class='self'>self</span> {
             <span class='ident'>ArgumentMissing</span>(<span class='kw-2'>ref</span> <span class='ident'>nm</span>) <span class='op'>=&gt;</span> {
@@ -2175,15 +2361,7 @@
     }
 }
 
-<span class='doccomment'>/// Parse command line arguments according to the provided options.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// On success returns `Ok(Matches)`. Use methods such as `opt_present`</span>
-<span class='doccomment'>/// `opt_str`, etc. to interrogate results.</span>
-<span class='doccomment'>/// # Panics</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Returns `Err(Fail)` on failure: use the `Show` implementation of `Fail` to display</span>
-<span class='doccomment'>/// information about it.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>String</span>], <span class='ident'>optgrps</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>OptGroup</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span> {
+<span class='kw'>fn</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>String</span>], <span class='ident'>optgrps</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>OptGroup</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span> {
     <span class='kw'>let</span> <span class='ident'>opts</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>Opt</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>optgrps</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>x</span><span class='op'>|</span> <span class='ident'>x</span>.<span class='ident'>long_to_short</span>()).<span class='ident'>collect</span>();
     <span class='kw'>let</span> <span class='ident'>n_opts</span> <span class='op'>=</span> <span class='ident'>opts</span>.<span class='ident'>len</span>();
 
@@ -2206,7 +2384,7 @@
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>names</span>;
             <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>i_arg</span> <span class='op'>=</span> <span class='prelude-val'>None</span>;
             <span class='kw'>if</span> <span class='ident'>cur</span>.<span class='ident'>as_bytes</span>()[<span class='number'>1</span>] <span class='op'>==</span> <span class='string'>b&#39;-&#39;</span> {
-                <span class='kw'>let</span> <span class='ident'>tail</span> <span class='op'>=</span> <span class='ident'>cur</span>.<span class='ident'>slice</span>(<span class='number'>2</span>, <span class='ident'>curlen</span>);
+                <span class='kw'>let</span> <span class='ident'>tail</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>cur</span>[<span class='number'>2</span>..<span class='ident'>curlen</span>];
                 <span class='kw'>let</span> <span class='ident'>tail_eq</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='ident'>str</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>tail</span>.<span class='ident'>split</span>(<span class='string'>&#39;=&#39;</span>).<span class='ident'>collect</span>();
                 <span class='kw'>if</span> <span class='ident'>tail_eq</span>.<span class='ident'>len</span>() <span class='op'>&lt;=</span> <span class='number'>1</span> {
                     <span class='ident'>names</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>Long</span>(<span class='ident'>tail</span>.<span class='ident'>to_string</span>()));
@@ -2242,7 +2420,7 @@
                     };
 
                     <span class='kw'>if</span> <span class='ident'>arg_follows</span> <span class='op'>&amp;&amp;</span> <span class='ident'>range</span>.<span class='ident'>next</span> <span class='op'>&lt;</span> <span class='ident'>curlen</span> {
-                        <span class='ident'>i_arg</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>cur</span>.<span class='ident'>slice</span>(<span class='ident'>range</span>.<span class='ident'>next</span>, <span class='ident'>curlen</span>).<span class='ident'>to_string</span>());
+                        <span class='ident'>i_arg</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>cur</span>[<span class='ident'>range</span>.<span class='ident'>next</span>..<span class='ident'>curlen</span>].<span class='ident'>to_string</span>());
                         <span class='kw'>break</span>;
                     }
 
@@ -2308,91 +2486,6 @@
     })
 }
 
-<span class='doccomment'>/// Derive a usage message from a set of long options.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>usage</span>(<span class='ident'>brief</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>opts</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>OptGroup</span>]) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
-
-    <span class='kw'>let</span> <span class='ident'>desc_sep</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;\n{}&quot;</span>, <span class='ident'>repeat</span>(<span class='string'>&quot; &quot;</span>).<span class='ident'>take</span>(<span class='number'>24</span>).<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span>());
-
-    <span class='kw'>let</span> <span class='ident'>rows</span> <span class='op'>=</span> <span class='ident'>opts</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>optref</span><span class='op'>|</span> {
-        <span class='kw'>let</span> <span class='ident'>OptGroup</span>{<span class='ident'>short_name</span>,
-                     <span class='ident'>long_name</span>,
-                     <span class='ident'>hint</span>,
-                     <span class='ident'>desc</span>,
-                     <span class='ident'>hasarg</span>,
-                     ..} <span class='op'>=</span> (<span class='op'>*</span><span class='ident'>optref</span>).<span class='ident'>clone</span>();
-
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>row</span> <span class='op'>=</span> <span class='string'>&quot;    &quot;</span>.<span class='ident'>to_string</span>();
-
-        <span class='comment'>// short option</span>
-        <span class='kw'>match</span> <span class='ident'>short_name</span>.<span class='ident'>len</span>() {
-            <span class='number'>0</span> <span class='op'>=&gt;</span> {}
-            <span class='number'>1</span> <span class='op'>=&gt;</span> {
-                <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39;-&#39;</span>);
-                <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>short_name</span>.<span class='ident'>as_slice</span>());
-                <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
-            }
-            _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;the short name should only be 1 ascii char long&quot;</span>),
-        }
-
-        <span class='comment'>// long option</span>
-        <span class='kw'>match</span> <span class='ident'>long_name</span>.<span class='ident'>len</span>() {
-            <span class='number'>0</span> <span class='op'>=&gt;</span> {}
-            _ <span class='op'>=&gt;</span> {
-                <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;--&quot;</span>);
-                <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>long_name</span>.<span class='ident'>as_slice</span>());
-                <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
-            }
-        }
-
-        <span class='comment'>// arg</span>
-        <span class='kw'>match</span> <span class='ident'>hasarg</span> {
-            <span class='ident'>No</span> <span class='op'>=&gt;</span> {}
-            <span class='ident'>Yes</span> <span class='op'>=&gt;</span> <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>hint</span>.<span class='ident'>as_slice</span>()),
-            <span class='ident'>Maybe</span> <span class='op'>=&gt;</span> {
-                <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39;[&#39;</span>);
-                <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>hint</span>.<span class='ident'>as_slice</span>());
-                <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39;]&#39;</span>);
-            }
-        }
-
-        <span class='comment'>// FIXME: #5516 should be graphemes not codepoints</span>
-        <span class='comment'>// here we just need to indent the start of the description</span>
-        <span class='kw'>let</span> <span class='ident'>rowlen</span> <span class='op'>=</span> <span class='ident'>row</span>.<span class='ident'>chars</span>().<span class='ident'>count</span>();
-        <span class='kw'>if</span> <span class='ident'>rowlen</span> <span class='op'>&lt;</span> <span class='number'>24</span> {
-            <span class='kw'>for</span> _ <span class='kw'>in</span> <span class='ident'>range</span>(<span class='number'>0</span>, <span class='number'>24</span> <span class='op'>-</span> <span class='ident'>rowlen</span>) {
-                <span class='ident'>row</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
-            }
-        } <span class='kw'>else</span> {
-            <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>desc_sep</span>.<span class='ident'>as_slice</span>())
-        }
-
-        <span class='comment'>// Normalize desc to contain words separated by one space character</span>
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>desc_normalized_whitespace</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>new</span>();
-        <span class='kw'>for</span> <span class='ident'>word</span> <span class='kw'>in</span> <span class='ident'>desc</span>.<span class='ident'>words</span>() {
-            <span class='ident'>desc_normalized_whitespace</span>.<span class='ident'>push_str</span>(<span class='ident'>word</span>);
-            <span class='ident'>desc_normalized_whitespace</span>.<span class='ident'>push</span>(<span class='string'>&#39; &#39;</span>);
-        }
-
-        <span class='comment'>// FIXME: #5516 should be graphemes not codepoints</span>
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>desc_rows</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
-        <span class='ident'>each_split_within</span>(<span class='ident'>desc_normalized_whitespace</span>.<span class='ident'>as_slice</span>(),
-                          <span class='number'>54</span>,
-                          <span class='op'>|</span><span class='ident'>substr</span><span class='op'>|</span> {
-            <span class='ident'>desc_rows</span>.<span class='ident'>push</span>(<span class='ident'>substr</span>.<span class='ident'>to_string</span>());
-            <span class='boolval'>true</span>
-        });
-
-        <span class='comment'>// FIXME: #5516 should be graphemes not codepoints</span>
-        <span class='comment'>// wrapped description</span>
-        <span class='ident'>row</span>.<span class='ident'>push_str</span>(<span class='ident'>desc_rows</span>.<span class='ident'>connect</span>(<span class='ident'>desc_sep</span>.<span class='ident'>as_slice</span>()).<span class='ident'>as_slice</span>());
-
-        <span class='ident'>row</span>
-    });
-
-    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}\n\nOptions:\n{}\n&quot;</span>, <span class='ident'>brief</span>,
-            <span class='ident'>rows</span>.<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span>().<span class='ident'>connect</span>(<span class='string'>&quot;\n&quot;</span>))
-}
-
 <span class='kw'>fn</span> <span class='ident'>format_option</span>(<span class='ident'>opt</span>: <span class='kw-2'>&amp;</span><span class='ident'>OptGroup</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>line</span> <span class='op'>=</span> <span class='ident'>String</span>::<span class='ident'>new</span>();
 
@@ -2427,17 +2520,6 @@
         <span class='ident'>line</span>.<span class='ident'>push_str</span>(<span class='string'>&quot;..&quot;</span>);
     }
 
-    <span class='ident'>line</span>
-}
-
-<span class='doccomment'>/// Derive a short one-line usage summary from a set of long options.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>short_usage</span>(<span class='ident'>program_name</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>opts</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>OptGroup</span>]) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
-    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>line</span> <span class='op'>=</span> <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Usage: {} &quot;</span>, <span class='ident'>program_name</span>);
-    <span class='ident'>line</span>.<span class='ident'>push_str</span>(<span class='ident'>opts</span>.<span class='ident'>iter</span>()
-                      .<span class='ident'>map</span>(<span class='ident'>format_option</span>)
-                      .<span class='ident'>collect</span>::<span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;&gt;</span>()
-                      .<span class='ident'>connect</span>(<span class='string'>&quot; &quot;</span>)
-                      .<span class='ident'>as_slice</span>());
     <span class='ident'>line</span>
 }
 
@@ -2499,9 +2581,9 @@
             (<span class='ident'>B</span>, <span class='ident'>Cr</span>, <span class='ident'>UnderLim</span>) <span class='op'>=&gt;</span> { <span class='ident'>B</span> }
             (<span class='ident'>B</span>, <span class='ident'>Cr</span>, <span class='ident'>OverLim</span>)  <span class='kw'>if</span> (<span class='ident'>i</span> <span class='op'>-</span> <span class='ident'>last_start</span> <span class='op'>+</span> <span class='number'>1</span>) <span class='op'>&gt;</span> <span class='ident'>lim</span>
                             <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;word starting with {} longer than limit!&quot;</span>,
-                                    <span class='ident'>ss</span>.<span class='ident'>slice</span>(<span class='ident'>last_start</span>, <span class='ident'>i</span> <span class='op'>+</span> <span class='number'>1</span>)),
+                                      <span class='kw-2'>&amp;</span><span class='ident'>ss</span>[<span class='ident'>last_start</span>..<span class='ident'>i</span> <span class='op'>+</span> <span class='number'>1</span>]),
             (<span class='ident'>B</span>, <span class='ident'>Cr</span>, <span class='ident'>OverLim</span>)  <span class='op'>=&gt;</span> {
-                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='ident'>ss</span>.<span class='ident'>slice</span>(<span class='ident'>slice_start</span>, <span class='ident'>last_end</span>));
+                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='kw-2'>&amp;</span><span class='ident'>ss</span>[<span class='ident'>slice_start</span>..<span class='ident'>last_end</span>]);
                 <span class='ident'>slice_start</span> <span class='op'>=</span> <span class='ident'>last_start</span>;
                 <span class='ident'>B</span>
             }
@@ -2511,7 +2593,7 @@
             }
             (<span class='ident'>B</span>, <span class='ident'>Ws</span>, <span class='ident'>OverLim</span>)  <span class='op'>=&gt;</span> {
                 <span class='ident'>last_end</span> <span class='op'>=</span> <span class='ident'>i</span>;
-                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='ident'>ss</span>.<span class='ident'>slice</span>(<span class='ident'>slice_start</span>, <span class='ident'>last_end</span>));
+                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='kw-2'>&amp;</span><span class='ident'>ss</span>[<span class='ident'>slice_start</span>..<span class='ident'>last_end</span>]);
                 <span class='ident'>A</span>
             }
 
@@ -2520,14 +2602,14 @@
                 <span class='ident'>B</span>
             }
             (<span class='ident'>C</span>, <span class='ident'>Cr</span>, <span class='ident'>OverLim</span>)  <span class='op'>=&gt;</span> {
-                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='ident'>ss</span>.<span class='ident'>slice</span>(<span class='ident'>slice_start</span>, <span class='ident'>last_end</span>));
+                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='kw-2'>&amp;</span><span class='ident'>ss</span>[<span class='ident'>slice_start</span>..<span class='ident'>last_end</span>]);
                 <span class='ident'>slice_start</span> <span class='op'>=</span> <span class='ident'>i</span>;
                 <span class='ident'>last_start</span> <span class='op'>=</span> <span class='ident'>i</span>;
                 <span class='ident'>last_end</span> <span class='op'>=</span> <span class='ident'>i</span>;
                 <span class='ident'>B</span>
             }
             (<span class='ident'>C</span>, <span class='ident'>Ws</span>, <span class='ident'>OverLim</span>)  <span class='op'>=&gt;</span> {
-                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='ident'>ss</span>.<span class='ident'>slice</span>(<span class='ident'>slice_start</span>, <span class='ident'>last_end</span>));
+                <span class='op'>*</span><span class='ident'>cont</span> <span class='op'>=</span> <span class='ident'>it</span>(<span class='kw-2'>&amp;</span><span class='ident'>ss</span>[<span class='ident'>slice_start</span>..<span class='ident'>last_end</span>]);
                 <span class='ident'>A</span>
             }
             (<span class='ident'>C</span>, <span class='ident'>Ws</span>, <span class='ident'>UnderLim</span>) <span class='op'>=&gt;</span> {
@@ -2569,16 +2651,16 @@
 
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>test</span>)]</span>
 <span class='kw'>mod</span> <span class='ident'>tests</span> {
-    <span class='kw'>use</span> <span class='ident'>super</span>::<span class='op'>*</span>;
+    <span class='kw'>use</span> <span class='ident'>super</span>::{<span class='ident'>HasArg</span>, <span class='ident'>Name</span>, <span class='ident'>Occur</span>, <span class='ident'>Opt</span>, <span class='ident'>Options</span>};
     <span class='kw'>use</span> <span class='ident'>super</span>::<span class='ident'>Fail</span>::<span class='op'>*</span>;
 
     <span class='comment'>// Tests for reqopt</span>
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_reqopt</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test=20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_str</span>(<span class='string'>&quot;test&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;20&quot;</span>);
@@ -2588,7 +2670,7 @@
           _ <span class='op'>=&gt;</span> { <span class='macro'>panic</span><span class='macro'>!</span>(<span class='string'>&quot;test_reqopt failed (long arg)&quot;</span>); }
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>((<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>)));
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_str</span>(<span class='string'>&quot;test&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;20&quot;</span>);
@@ -2602,9 +2684,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_reqopt_missing</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;blah&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>OptionMissing</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2613,14 +2695,14 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_reqopt_no_arg</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>ArgumentMissing</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>ArgumentMissing</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2629,9 +2711,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_reqopt_multi</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test=20&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;30&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>reqopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>OptionDuplicated</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2641,9 +2723,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optopt</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test=20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_str</span>(<span class='string'>&quot;test&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;20&quot;</span>);
@@ -2653,7 +2735,7 @@
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>((<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>)));
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_str</span>(<span class='string'>&quot;test&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;20&quot;</span>);
@@ -2667,9 +2749,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optopt_missing</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;blah&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
@@ -2681,14 +2763,14 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optopt_no_arg</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>ArgumentMissing</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>ArgumentMissing</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2697,9 +2779,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optopt_multi</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test=20&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;30&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optopt</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>OptionDuplicated</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2709,9 +2791,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflag</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
@@ -2719,7 +2801,7 @@
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
@@ -2731,9 +2813,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflag_missing</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;blah&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
@@ -2745,9 +2827,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflag_long_arg</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test=20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>UnexpectedArgument</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2756,9 +2838,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflag_multi</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>OptionDuplicated</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2767,9 +2849,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflag_short_arg</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='comment'>// The next variable after the flag is just a free argument</span>
 
@@ -2783,9 +2865,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflagmulti_short1</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-v&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;v&quot;</span>), <span class='number'>1</span>);
           }
@@ -2796,9 +2878,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflagmulti_short2a</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-v&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-v&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;v&quot;</span>), <span class='number'>2</span>);
           }
@@ -2809,9 +2891,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflagmulti_short2b</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-vv&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;v&quot;</span>), <span class='number'>2</span>);
           }
@@ -2822,9 +2904,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflagmulti_long1</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--verbose&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;verbose&quot;</span>), <span class='number'>1</span>);
           }
@@ -2835,9 +2917,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optflagmulti_long2</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--verbose&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;--verbose&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;verbose&quot;</span>), <span class='number'>2</span>);
           }
@@ -2849,12 +2931,43 @@
     <span class='kw'>fn</span> <span class='ident'>test_optflagmulti_mix</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--verbose&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-v&quot;</span>.<span class='ident'>to_string</span>(),
                         <span class='string'>&quot;-vv&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;verbose&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;verbosity&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;verbose&quot;</span>), <span class='number'>4</span>);
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;v&quot;</span>), <span class='number'>4</span>);
+          }
+          _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
+        }
+    }
+
+    <span class='comment'>// Tests for optflagopt</span>
+    <span class='attribute'>#[<span class='ident'>test</span>]</span>
+    <span class='kw'>fn</span> <span class='ident'>test_optflagopt</span>() {
+        <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test&quot;</span>.<span class='ident'>to_string</span>());
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
+          <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
+            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
+            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
+          }
+          _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
+        }
+        <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>());
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
+          <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
+            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
+            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
+          }
+          _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
+        }
+        <span class='kw'>let</span> <span class='ident'>no_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>();
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>no_args</span>.<span class='ident'>as_slice</span>()) {
+          <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
+            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
+            <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
           }
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2864,9 +2977,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optmulti</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test=20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>((<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>)));
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_str</span>(<span class='string'>&quot;test&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;20&quot;</span>);
@@ -2876,7 +2989,7 @@
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;20&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>((<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>)));
             <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_str</span>(<span class='string'>&quot;test&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;20&quot;</span>);
@@ -2890,9 +3003,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optmulti_missing</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;blah&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;t&quot;</span>));
@@ -2904,14 +3017,14 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optmulti_no_arg</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>ArgumentMissing</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>ArgumentMissing</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2920,9 +3033,9 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_optmulti_multi</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--test=20&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-t&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;30&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
               <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_present</span>(<span class='string'>&quot;test&quot;</span>));
               <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>opt_str</span>(<span class='string'>&quot;test&quot;</span>).<span class='ident'>unwrap</span>(), <span class='string'>&quot;20&quot;</span>);
@@ -2939,14 +3052,14 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_unrecognized_option</span>() {
         <span class='kw'>let</span> <span class='ident'>long_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;--untest&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optmulti</span>(<span class='string'>&quot;t&quot;</span>, <span class='string'>&quot;test&quot;</span>, <span class='string'>&quot;testing&quot;</span>, <span class='string'>&quot;TEST&quot;</span>);
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>long_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>UnrecognizedOption</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
         <span class='kw'>let</span> <span class='ident'>short_args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-u&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>short_args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Err</span>(<span class='ident'>UnrecognizedOption</span>(_)) <span class='op'>=&gt;</span> {},
           _ <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         }
@@ -2971,16 +3084,15 @@
                  <span class='string'>&quot;-A B&quot;</span>.<span class='ident'>to_string</span>(),
                  <span class='string'>&quot;-n&quot;</span>.<span class='ident'>to_string</span>(),
                  <span class='string'>&quot;-60 70&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span>
-            <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optopt</span>(<span class='string'>&quot;s&quot;</span>, <span class='string'>&quot;something&quot;</span>, <span class='string'>&quot;something&quot;</span>, <span class='string'>&quot;SOMETHING&quot;</span>),
-              <span class='ident'>optflag</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;flag&quot;</span>, <span class='string'>&quot;a flag&quot;</span>),
-              <span class='ident'>reqopt</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;long&quot;</span>, <span class='string'>&quot;hi&quot;</span>, <span class='string'>&quot;LONG&quot;</span>),
-              <span class='ident'>optflag</span>(<span class='string'>&quot;f&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;another flag&quot;</span>),
-              <span class='ident'>optmulti</span>(<span class='string'>&quot;m&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;mmmmmm&quot;</span>, <span class='string'>&quot;YUM&quot;</span>),
-              <span class='ident'>optmulti</span>(<span class='string'>&quot;n&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;nothing&quot;</span>, <span class='string'>&quot;NOTHING&quot;</span>),
-              <span class='ident'>optopt</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;notpresent&quot;</span>, <span class='string'>&quot;nothing to see here&quot;</span>, <span class='string'>&quot;NOPE&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>rs</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>());
-        <span class='kw'>match</span> <span class='ident'>rs</span> {
+        <span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                      .<span class='ident'>optopt</span>(<span class='string'>&quot;s&quot;</span>, <span class='string'>&quot;something&quot;</span>, <span class='string'>&quot;something&quot;</span>, <span class='string'>&quot;SOMETHING&quot;</span>)
+                      .<span class='ident'>optflag</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;flag&quot;</span>, <span class='string'>&quot;a flag&quot;</span>)
+                      .<span class='ident'>reqopt</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;long&quot;</span>, <span class='string'>&quot;hi&quot;</span>, <span class='string'>&quot;LONG&quot;</span>)
+                      .<span class='ident'>optflag</span>(<span class='string'>&quot;f&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;another flag&quot;</span>)
+                      .<span class='ident'>optmulti</span>(<span class='string'>&quot;m&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;mmmmmm&quot;</span>, <span class='string'>&quot;YUM&quot;</span>)
+                      .<span class='ident'>optmulti</span>(<span class='string'>&quot;n&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;nothing&quot;</span>, <span class='string'>&quot;NOTHING&quot;</span>)
+                      .<span class='ident'>optopt</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;notpresent&quot;</span>, <span class='string'>&quot;nothing to see here&quot;</span>, <span class='string'>&quot;NOPE&quot;</span>)
+                      .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='kw-2'>ref</span> <span class='ident'>m</span>) <span class='op'>=&gt;</span> {
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>free</span>[<span class='number'>0</span>] <span class='op'>==</span> <span class='string'>&quot;prog&quot;</span>);
             <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>m</span>.<span class='ident'>free</span>[<span class='number'>1</span>] <span class='op'>==</span> <span class='string'>&quot;free1&quot;</span>);
@@ -3003,13 +3115,13 @@
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_multi</span>() {
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optopt</span>(<span class='string'>&quot;e&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;encrypt&quot;</span>, <span class='string'>&quot;ENCRYPT&quot;</span>),
-                     <span class='ident'>optopt</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;encrypt&quot;</span>, <span class='string'>&quot;encrypt&quot;</span>, <span class='string'>&quot;ENCRYPT&quot;</span>),
-                     <span class='ident'>optopt</span>(<span class='string'>&quot;f&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;flag&quot;</span>, <span class='string'>&quot;FLAG&quot;</span>));
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optopt</span>(<span class='string'>&quot;e&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;encrypt&quot;</span>, <span class='string'>&quot;ENCRYPT&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optopt</span>(<span class='string'>&quot;&quot;</span>, <span class='string'>&quot;encrypt&quot;</span>, <span class='string'>&quot;encrypt&quot;</span>, <span class='string'>&quot;ENCRYPT&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optopt</span>(<span class='string'>&quot;f&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;flag&quot;</span>, <span class='string'>&quot;FLAG&quot;</span>);
 
         <span class='kw'>let</span> <span class='ident'>args_single</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-e&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;foo&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>matches_single</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>args_single</span>.<span class='ident'>as_slice</span>(),
-                                            <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>let</span> <span class='ident'>matches_single</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>args_single</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='ident'>m</span>) <span class='op'>=&gt;</span> <span class='ident'>m</span>,
           <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         };
@@ -3028,8 +3140,7 @@
 
         <span class='kw'>let</span> <span class='ident'>args_both</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-e&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;foo&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;--encrypt&quot;</span>.<span class='ident'>to_string</span>(),
                              <span class='string'>&quot;foo&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>matches_both</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>args_both</span>.<span class='ident'>as_slice</span>(),
-                                          <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>let</span> <span class='ident'>matches_both</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>args_both</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='ident'>m</span>) <span class='op'>=&gt;</span> <span class='ident'>m</span>,
           <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         };
@@ -3052,9 +3163,10 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_nospace</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-Lfoo&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-M.&quot;</span>.<span class='ident'>to_string</span>());
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optmulti</span>(<span class='string'>&quot;L&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;library directory&quot;</span>, <span class='string'>&quot;LIB&quot;</span>),
-                     <span class='ident'>optmulti</span>(<span class='string'>&quot;M&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;something&quot;</span>, <span class='string'>&quot;MMMM&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>matches</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>let</span> <span class='ident'>matches</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                                     .<span class='ident'>optmulti</span>(<span class='string'>&quot;L&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;library directory&quot;</span>, <span class='string'>&quot;LIB&quot;</span>)
+                                     .<span class='ident'>optmulti</span>(<span class='string'>&quot;M&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;something&quot;</span>, <span class='string'>&quot;MMMM&quot;</span>)
+                                     .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='ident'>m</span>) <span class='op'>=&gt;</span> <span class='ident'>m</span>,
           <span class='prelude-val'>Err</span>(_) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>()
         };
@@ -3068,9 +3180,10 @@
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_nospace_conflict</span>() {
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-vvLverbose&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-v&quot;</span>.<span class='ident'>to_string</span>() );
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='ident'>optmulti</span>(<span class='string'>&quot;L&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;library directory&quot;</span>, <span class='string'>&quot;LIB&quot;</span>),
-                     <span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;Verbose&quot;</span>));
-        <span class='kw'>let</span> <span class='ident'>matches</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()) {
+        <span class='kw'>let</span> <span class='ident'>matches</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='kw'>match</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                                     .<span class='ident'>optmulti</span>(<span class='string'>&quot;L&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;library directory&quot;</span>, <span class='string'>&quot;LIB&quot;</span>)
+                                     .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;v&quot;</span>, <span class='string'>&quot;verbose&quot;</span>, <span class='string'>&quot;Verbose&quot;</span>)
+                                     .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>()) {
           <span class='prelude-val'>Ok</span>(<span class='ident'>m</span>) <span class='op'>=&gt;</span> <span class='ident'>m</span>,
           <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>( <span class='string'>&quot;{}&quot;</span>, <span class='ident'>e</span> )
         };
@@ -3092,32 +3205,33 @@
                                 <span class='ident'>hasarg</span>: <span class='ident'>HasArg</span>::<span class='ident'>Yes</span>,
                                 <span class='ident'>occur</span>: <span class='ident'>Occur</span>::<span class='ident'>Req</span>,
                                 <span class='ident'>aliases</span>: <span class='ident'>Vec</span>::<span class='ident'>new</span>() });
-        <span class='kw'>let</span> <span class='ident'>verbose</span> <span class='op'>=</span> <span class='ident'>reqopt</span>(<span class='string'>&quot;b&quot;</span>, <span class='string'>&quot;banana&quot;</span>, <span class='string'>&quot;some bananas&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
-
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>reqopt</span>(<span class='string'>&quot;b&quot;</span>, <span class='string'>&quot;banana&quot;</span>, <span class='string'>&quot;some bananas&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
+        <span class='kw'>let</span> <span class='kw-2'>ref</span> <span class='ident'>verbose</span> <span class='op'>=</span> <span class='ident'>opts</span>.<span class='ident'>grps</span>[<span class='number'>0</span>];
         <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>verbose</span>.<span class='ident'>long_to_short</span>() <span class='op'>==</span> <span class='ident'>short</span>);
     }
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_aliases_long_and_short</span>() {
-        <span class='kw'>let</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(
-            <span class='ident'>optflagmulti</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;apple&quot;</span>, <span class='string'>&quot;Desc&quot;</span>));
-
         <span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(<span class='string'>&quot;-a&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;--apple&quot;</span>.<span class='ident'>to_string</span>(), <span class='string'>&quot;-a&quot;</span>.<span class='ident'>to_string</span>());
 
-        <span class='kw'>let</span> <span class='ident'>matches</span> <span class='op'>=</span> <span class='ident'>getopts</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>.<span class='ident'>as_slice</span>()).<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>matches</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>()
+                              .<span class='ident'>optflagmulti</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;apple&quot;</span>, <span class='string'>&quot;Desc&quot;</span>)
+                              .<span class='ident'>parse</span>(<span class='ident'>args</span>.<span class='ident'>as_slice</span>())
+                              .<span class='ident'>unwrap</span>();
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>matches</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;a&quot;</span>));
         <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='number'>3</span>, <span class='ident'>matches</span>.<span class='ident'>opt_count</span>(<span class='string'>&quot;apple&quot;</span>));
     }
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_usage</span>() {
-        <span class='kw'>let</span> <span class='ident'>optgroups</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(
-            <span class='ident'>reqopt</span>(<span class='string'>&quot;b&quot;</span>, <span class='string'>&quot;banana&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>),
-            <span class='ident'>optopt</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;012345678901234567890123456789&quot;</span>,
-                             <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>),
-            <span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;kiwi&quot;</span>, <span class='string'>&quot;Desc&quot;</span>),
-            <span class='ident'>optflagopt</span>(<span class='string'>&quot;p&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>),
-            <span class='ident'>optmulti</span>(<span class='string'>&quot;l&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>));
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>reqopt</span>(<span class='string'>&quot;b&quot;</span>, <span class='string'>&quot;banana&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optopt</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;012345678901234567890123456789&quot;</span>,
+                             <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;kiwi&quot;</span>, <span class='string'>&quot;Desc&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optflagopt</span>(<span class='string'>&quot;p&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optmulti</span>(<span class='string'>&quot;l&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
 
         <span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span>
 <span class='string'>&quot;Usage: fruits
@@ -3131,7 +3245,7 @@ Options:
     -l VAL              Desc
 &quot;</span>;
 
-        <span class='kw'>let</span> <span class='ident'>generated_usage</span> <span class='op'>=</span> <span class='ident'>usage</span>(<span class='string'>&quot;Usage: fruits&quot;</span>, <span class='ident'>optgroups</span>.<span class='ident'>as_slice</span>());
+        <span class='kw'>let</span> <span class='ident'>generated_usage</span> <span class='op'>=</span> <span class='ident'>opts</span>.<span class='ident'>usage</span>(<span class='string'>&quot;Usage: fruits&quot;</span>);
 
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;expected: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>expected</span>);
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;generated: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>generated_usage</span>);
@@ -3143,11 +3257,11 @@ Options:
         <span class='comment'>// indentation should be 24 spaces</span>
         <span class='comment'>// lines wrap after 78: or rather descriptions wrap after 54</span>
 
-        <span class='kw'>let</span> <span class='ident'>optgroups</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(
-            <span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;kiwi&quot;</span>,
-                <span class='string'>&quot;This is a long description which won&#39;t be wrapped..+..&quot;</span>), <span class='comment'>// 54</span>
-            <span class='ident'>optflag</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;apple&quot;</span>,
-                <span class='string'>&quot;This is a long description which _will_ be wrapped..+..&quot;</span>));
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;kiwi&quot;</span>,
+            <span class='string'>&quot;This is a long description which won&#39;t be wrapped..+..&quot;</span>); <span class='comment'>// 54</span>
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;apple&quot;</span>,
+            <span class='string'>&quot;This is a long description which _will_ be wrapped..+..&quot;</span>);
 
         <span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span>
 <span class='string'>&quot;Usage: fruits
@@ -3158,7 +3272,7 @@ Options:
                         wrapped..+..
 &quot;</span>;
 
-        <span class='kw'>let</span> <span class='ident'>usage</span> <span class='op'>=</span> <span class='ident'>usage</span>(<span class='string'>&quot;Usage: fruits&quot;</span>, <span class='ident'>optgroups</span>.<span class='ident'>as_slice</span>());
+        <span class='kw'>let</span> <span class='ident'>usage</span> <span class='op'>=</span> <span class='ident'>opts</span>.<span class='ident'>usage</span>(<span class='string'>&quot;Usage: fruits&quot;</span>);
 
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;expected: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>expected</span>);
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;generated: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>usage</span>);
@@ -3167,12 +3281,12 @@ Options:
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_usage_description_multibyte_handling</span>() {
-        <span class='kw'>let</span> <span class='ident'>optgroups</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(
-            <span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;k\u{2013}w\u{2013}&quot;</span>,
-                <span class='string'>&quot;The word kiwi is normally spelled with two i&#39;s&quot;</span>),
-            <span class='ident'>optflag</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;apple&quot;</span>,
-                <span class='string'>&quot;This \u{201C}description\u{201D} has some characters that could \
-confuse the line wrapping; an apple costs 0.51€ in some parts of Europe.&quot;</span>));
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;k\u{2013}w\u{2013}&quot;</span>,
+            <span class='string'>&quot;The word kiwi is normally spelled with two i&#39;s&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;apple&quot;</span>,
+            <span class='string'>&quot;This \u{201C}description\u{201D} has some characters that could \
+confuse the line wrapping; an apple costs 0.51€ in some parts of Europe.&quot;</span>);
 
         <span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span>
 <span class='string'>&quot;Usage: fruits
@@ -3184,7 +3298,7 @@ Options:
                         some parts of Europe.
 &quot;</span>;
 
-        <span class='kw'>let</span> <span class='ident'>usage</span> <span class='op'>=</span> <span class='ident'>usage</span>(<span class='string'>&quot;Usage: fruits&quot;</span>, <span class='ident'>optgroups</span>.<span class='ident'>as_slice</span>());
+        <span class='kw'>let</span> <span class='ident'>usage</span> <span class='op'>=</span> <span class='ident'>opts</span>.<span class='ident'>usage</span>(<span class='string'>&quot;Usage: fruits&quot;</span>);
 
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;expected: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>expected</span>);
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;generated: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>usage</span>);
@@ -3193,16 +3307,16 @@ Options:
 
     <span class='attribute'>#[<span class='ident'>test</span>]</span>
     <span class='kw'>fn</span> <span class='ident'>test_short_usage</span>() {
-        <span class='kw'>let</span> <span class='ident'>optgroups</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>(
-            <span class='ident'>reqopt</span>(<span class='string'>&quot;b&quot;</span>, <span class='string'>&quot;banana&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>),
-            <span class='ident'>optopt</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;012345678901234567890123456789&quot;</span>,
-                     <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>),
-            <span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;kiwi&quot;</span>, <span class='string'>&quot;Desc&quot;</span>),
-            <span class='ident'>optflagopt</span>(<span class='string'>&quot;p&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>),
-            <span class='ident'>optmulti</span>(<span class='string'>&quot;l&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>));
+        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>opts</span> <span class='op'>=</span> <span class='ident'>Options</span>::<span class='ident'>new</span>();
+        <span class='ident'>opts</span>.<span class='ident'>reqopt</span>(<span class='string'>&quot;b&quot;</span>, <span class='string'>&quot;banana&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optopt</span>(<span class='string'>&quot;a&quot;</span>, <span class='string'>&quot;012345678901234567890123456789&quot;</span>,
+                     <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;k&quot;</span>, <span class='string'>&quot;kiwi&quot;</span>, <span class='string'>&quot;Desc&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optflagopt</span>(<span class='string'>&quot;p&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
+        <span class='ident'>opts</span>.<span class='ident'>optmulti</span>(<span class='string'>&quot;l&quot;</span>, <span class='string'>&quot;&quot;</span>, <span class='string'>&quot;Desc&quot;</span>, <span class='string'>&quot;VAL&quot;</span>);
 
         <span class='kw'>let</span> <span class='ident'>expected</span> <span class='op'>=</span> <span class='string'>&quot;Usage: fruits -b VAL [-a VAL] [-k] [-p [VAL]] [-l VAL]..&quot;</span>.<span class='ident'>to_string</span>();
-        <span class='kw'>let</span> <span class='ident'>generated_usage</span> <span class='op'>=</span> <span class='ident'>short_usage</span>(<span class='string'>&quot;fruits&quot;</span>, <span class='ident'>optgroups</span>.<span class='ident'>as_slice</span>());
+        <span class='kw'>let</span> <span class='ident'>generated_usage</span> <span class='op'>=</span> <span class='ident'>opts</span>.<span class='ident'>short_usage</span>(<span class='string'>&quot;fruits&quot;</span>);
 
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;expected: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>expected</span>);
         <span class='macro'>debug</span><span class='macro'>!</span>(<span class='string'>&quot;generated: &lt;&lt;{}&gt;&gt;&quot;</span>, <span class='ident'>generated_usage</span>);

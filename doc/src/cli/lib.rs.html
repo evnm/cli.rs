@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/evanm/workspace/cli.rs/src/lib.rs`.">
+    <meta name="description" content="Source to the Rust file `src/lib.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>lib.rs.html -- source</title>
@@ -254,8 +254,13 @@
 <span id="212">212</span>
 <span id="213">213</span>
 <span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
 </pre><pre class='rust '>
-<span class='doccomment'>//! A toolkit for building command-line programs in Rust.</span>
+<span class='doccomment'>//! A toolkit for building Unix command-line programs in Rust.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! `cli` aims to</span>
 <span class='doccomment'>//!</span>
@@ -266,11 +271,10 @@
 <span class='doccomment'>//! - encourage appropriate use of exit statuses</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! Concretely, `cli` is a collection of simple functions for formatting</span>
-<span class='doccomment'>//! command-line output, defining flags, and (eventually) things like</span>
-<span class='doccomment'>//! integrating with sysexits.</span>
+<span class='doccomment'>//! command-line output, defining flags, and adhering to Unix conventions.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! It uses [getopts](http://doc.rust-lang.org/getopts/) for argument parsing</span>
-<span class='doccomment'>//! and thus currently inherits `getopt`&#39;s `experimental` stability level.</span>
+<span class='doccomment'>//! &gt; **Warning**: Though unmarked, this library should be considered unstable, in</span>
+<span class='doccomment'>//! &gt; part due to its usage of unstable language features.</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Usage</span>
 <span class='doccomment'>//!</span>
@@ -282,16 +286,18 @@
 <span class='doccomment'>//!     extern crate cli;</span>
 <span class='doccomment'>//!     extern crate getopts;</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//!     fn main() {</span>
-<span class='doccomment'>//!         let opts = &amp;[</span>
-<span class='doccomment'>//!             cli::helpopt(),</span>
-<span class='doccomment'>//!             cli::versionopt(),</span>
-<span class='doccomment'>//!             getopts::optopt(&quot;o&quot;, &quot;&quot;, &quot;Set output file name&quot;, &quot;FILENAME&quot;),</span>
-<span class='doccomment'>//!         ];</span>
+<span class='doccomment'>//!     use getopts::Options;</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//!         let matches = cli::parse_args(opts);</span>
+<span class='doccomment'>//!     fn main() {</span>
+<span class='doccomment'>//!         let mut opts = Options::new();</span>
+<span class='doccomment'>//!         cli::helpopt(&amp;mut opts);</span>
+<span class='doccomment'>//!         cli::versionopt(&amp;mut opts);</span>
+<span class='doccomment'>//!         opts.optopt(&quot;o&quot;, &quot;&quot;, &quot;Set output file name&quot;, &quot;FILENAME&quot;);</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//!         let matches = cli::parse_args(&amp;opts);</span>
+<span class='doccomment'>//!</span>
 <span class='doccomment'>//!         if matches.opt_present(&quot;h&quot;) {</span>
-<span class='doccomment'>//!             println!(&quot;{}&quot;, cli::usage_string(opts));</span>
+<span class='doccomment'>//!             println!(&quot;{}&quot;, cli::usage_string(&amp;opts));</span>
 <span class='doccomment'>//!             return;</span>
 <span class='doccomment'>//!         }</span>
 <span class='doccomment'>//!         if matches.opt_present(&quot;version&quot;) {</span>
@@ -318,13 +324,17 @@
 <span class='doccomment'>//! ```</span>
 
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_name</span> <span class='op'>=</span> <span class='string'>&quot;cli&quot;</span>]</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>experimental</span>]</span>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_type</span><span class='op'>=</span><span class='string'>&quot;rlib&quot;</span>]</span>
 
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>collections</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>io</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>os</span>)]</span>
+<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>path</span>)]</span>
+
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>getopts</span>;
-<span class='kw'>use</span> <span class='ident'>getopts</span>::{<span class='ident'>Matches</span>, <span class='ident'>OptGroup</span>, <span class='ident'>getopts</span>, <span class='ident'>optflag</span>, <span class='ident'>short_usage</span>, <span class='ident'>usage</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>io</span>, <span class='ident'>os</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>fs</span>;
+<span class='kw'>use</span> <span class='ident'>getopts</span>::{<span class='ident'>Matches</span>, <span class='ident'>Options</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::{<span class='ident'>old_io</span>, <span class='ident'>os</span>};
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>old_io</span>::<span class='ident'>fs</span>;
 
 <span class='kw'>mod</span> <span class='ident'>test</span>;
 
@@ -395,7 +405,7 @@
     <span class='ident'>fs</span>::<span class='ident'>readlink</span>(<span class='kw-2'>&amp;</span><span class='ident'>path</span>).<span class='ident'>unwrap_or</span>(<span class='ident'>path</span>)
 }
 
-<span class='doccomment'>/// Construct a canonical usage string from a collection of `OptGroup`s.</span>
+<span class='doccomment'>/// Construct a canonical usage string from a collection of `Options`.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// Usage string format:</span>
 <span class='doccomment'>///</span>
@@ -405,10 +415,10 @@
 <span class='doccomment'>/// Options:</span>
 <span class='doccomment'>///     [option description]...</span>
 <span class='doccomment'>/// ```</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>usage_string</span>(<span class='ident'>opts</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>OptGroup</span>]) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>usage_string</span>(<span class='ident'>opts</span>: <span class='kw-2'>&amp;</span><span class='ident'>Options</span>) <span class='op'>-&gt;</span> <span class='ident'>String</span> {
     <span class='kw'>let</span> <span class='ident'>exec_path</span> <span class='op'>=</span> <span class='ident'>exec_path</span>();
     <span class='kw'>let</span> <span class='ident'>exec_path</span> <span class='op'>=</span> <span class='ident'>exec_path</span>.<span class='ident'>as_str</span>().<span class='ident'>unwrap_or_else</span>(<span class='op'>||</span> <span class='string'>&quot;&quot;</span>);
-    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>usage</span>(<span class='ident'>short_usage</span>(<span class='ident'>exec_path</span>, <span class='ident'>opts</span>).<span class='ident'>as_slice</span>(), <span class='ident'>opts</span>))
+    <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>opts</span>.<span class='ident'>usage</span>(<span class='kw-2'>&amp;</span><span class='ident'>opts</span>.<span class='ident'>short_usage</span>(<span class='ident'>exec_path</span>)[]))
 }
 
 <span class='doccomment'>/// Construct a version string.</span>
@@ -426,7 +436,7 @@
 }
 
 <span class='doccomment'>/// Parse the command-line arguments with which the program was executed</span>
-<span class='doccomment'>/// according to a collection of `OptGroup`s.</span>
+<span class='doccomment'>/// according to a collection of `Options`.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// Any flag parsing failure results in task panic. The program&#39;s usage string</span>
 <span class='doccomment'>/// is printed to stderr prior to panic. Panic is induced in order to avoid</span>
@@ -434,12 +444,12 @@
 <span class='doccomment'>/// of unrecognized flags or invalid flag values implies confusion on the part</span>
 <span class='doccomment'>/// of the executor. While perhaps overbearing, it is preferable to halt</span>
 <span class='doccomment'>/// execution abruptly than to continue with the risk of unwanted behavior.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_args</span>(<span class='ident'>opts</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>OptGroup</span>]) <span class='op'>-&gt;</span> <span class='ident'>Matches</span> {
-    <span class='kw'>match</span> <span class='ident'>getopts</span>(<span class='ident'>os</span>::<span class='ident'>args</span>().<span class='ident'>tail</span>(), <span class='ident'>opts</span>) {
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>parse_args</span>(<span class='ident'>opts</span>: <span class='kw-2'>&amp;</span><span class='ident'>Options</span>) <span class='op'>-&gt;</span> <span class='ident'>Matches</span> {
+    <span class='kw'>match</span> <span class='ident'>opts</span>.<span class='ident'>parse</span>(<span class='ident'>os</span>::<span class='ident'>args</span>().<span class='ident'>tail</span>()) {
         <span class='prelude-val'>Ok</span>(<span class='ident'>matches</span>) <span class='op'>=&gt;</span> <span class='ident'>matches</span>,
         <span class='prelude-val'>Err</span>(<span class='ident'>getopts_error</span>) <span class='op'>=&gt;</span> {
             <span class='comment'>// Write usage string to stderr, then panic.</span>
-            <span class='kw'>match</span> <span class='ident'>io</span>::<span class='ident'>stderr</span>().<span class='ident'>write_str</span>(<span class='ident'>usage_string</span>(<span class='ident'>opts</span>).<span class='ident'>as_slice</span>()) {
+            <span class='kw'>match</span> <span class='ident'>old_io</span>::<span class='ident'>stderr</span>().<span class='ident'>write_str</span>(<span class='kw-2'>&amp;</span><span class='ident'>usage_string</span>(<span class='ident'>opts</span>)[]) {
                 <span class='prelude-val'>Ok</span>(()) <span class='op'>=&gt;</span> <span class='macro'>panic</span><span class='macro'>!</span>(<span class='ident'>getopts_error</span>.<span class='ident'>to_string</span>()),
                 <span class='prelude-val'>Err</span>(<span class='ident'>write_error</span>) <span class='op'>=&gt;</span>
                     <span class='comment'>// Write to stderr failed -- panic with both error messages.</span>
@@ -449,24 +459,24 @@
     }
 }
 
-<span class='doccomment'>/// Create a help flag `OptGroup`.</span>
+<span class='doccomment'>/// Add a help flag to `Options`.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// The returned `OptGroup` is an optional long option for the input `-h`</span>
+<span class='doccomment'>/// The flag added is an optional long option for the input `-h`</span>
 <span class='doccomment'>/// and `--help`.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>helpopt</span>() <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='ident'>optflag</span>(<span class='string'>&quot;h&quot;</span>, <span class='string'>&quot;help&quot;</span>, <span class='string'>&quot;Print this help menu&quot;</span>)
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>helpopt</span>(<span class='ident'>opts</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+    <span class='ident'>opts</span>.<span class='ident'>optflag</span>(<span class='string'>&quot;h&quot;</span>, <span class='string'>&quot;help&quot;</span>, <span class='string'>&quot;Print this help menu&quot;</span>)
 }
 
-<span class='doccomment'>/// Create a version flag `OptGroup`.</span>
+<span class='doccomment'>/// Add a version flag to `Options`.</span>
 <span class='doccomment'>///</span>
-<span class='doccomment'>/// The returned `OptGroup` is an optional long option for the input</span>
+<span class='doccomment'>/// The flag added is an optional long option for the input</span>
 <span class='doccomment'>/// `--version`. `-v` and `-V` are avoided in order to prevent confusion in the</span>
 <span class='doccomment'>/// event when a flag is needed for enabling verbose output.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>versionopt</span>() <span class='op'>-&gt;</span> <span class='ident'>OptGroup</span> {
-    <span class='ident'>optflag</span>(
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>versionopt</span>(<span class='ident'>opts</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Options</span> {
+    <span class='ident'>opts</span>.<span class='ident'>optflag</span>(
         <span class='string'>&quot;&quot;</span>,
         <span class='string'>&quot;version&quot;</span>,
-        <span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Print the version of {} being run&quot;</span>, <span class='ident'>exec_path</span>().<span class='ident'>display</span>()).<span class='ident'>as_slice</span>()
+        <span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;Print the version of {} being run&quot;</span>, <span class='ident'>exec_path</span>().<span class='ident'>display</span>())[]
     )
 }
 </pre>
