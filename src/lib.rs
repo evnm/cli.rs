@@ -65,16 +65,14 @@
 #![crate_type="rlib"]
 
 #![feature(collections)]
+#![feature(env)]
 #![feature(io)]
-#![feature(os)]
 #![feature(path)]
 
 extern crate getopts;
 use getopts::{Matches, Options};
-use std::{old_io, os};
+use std::{env, old_io};
 use std::old_io::fs;
-
-mod test;
 
 /// A collection of predefined exit codes cribbed from
 /// [sysexits.h](http://www.freebsd.org/cgi/man.cgi?query=sysexits).
@@ -134,13 +132,14 @@ pub mod sysexits {
     pub const CONFIG: isize = 78;
 }
 
-/// The file path of the executed program.
-///
-/// Typically the file path of the invoked executable. If the invocation target
-/// is a symlink, then it will be resolved to the executable it links to.
-pub fn exec_path() -> Path {
-    let path = Path::new(os::args()[0].clone());
-    fs::readlink(&path).unwrap_or(path)
+/// The file path, as a string, of the executed program.
+fn exe_str() -> String {
+    let realpath_str = env::current_exe()
+        .map(|path| {
+            let realpath = fs::readlink(&path).unwrap_or(path);
+            String::from_str(realpath.filename_str().unwrap_or(""))
+        });
+    realpath_str.unwrap_or(String::new())
 }
 
 /// Construct a canonical usage string from a collection of `Options`.
@@ -154,9 +153,7 @@ pub fn exec_path() -> Path {
 ///     [option description]...
 /// ```
 pub fn usage_string(opts: &Options) -> String {
-    let exec_path = exec_path();
-    let exec_path = exec_path.as_str().unwrap_or_else(|| "");
-    format!("{}", opts.usage(&opts.short_usage(exec_path)[]))
+    format!("{}", opts.usage(&opts.short_usage(exe_str().as_slice())[]))
 }
 
 /// Construct a version string.
@@ -170,7 +167,7 @@ pub fn usage_string(opts: &Options) -> String {
 /// <program name> version <version>
 /// ```
 pub fn version_string(version: &str) -> String {
-    format!("{} version {}", exec_path().display(), version)
+    format!("{} version {}", exe_str(), version)
 }
 
 /// Parse the command-line arguments with which the program was executed
@@ -183,7 +180,7 @@ pub fn version_string(version: &str) -> String {
 /// of the executor. While perhaps overbearing, it is preferable to halt
 /// execution abruptly than to continue with the risk of unwanted behavior.
 pub fn parse_args(opts: &Options) -> Matches {
-    match opts.parse(os::args().tail()) {
+    match opts.parse(env::args()) {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
@@ -214,6 +211,6 @@ pub fn versionopt(opts: &mut Options) -> &mut Options {
     opts.optflag(
         "",
         "version",
-        &format!("Print the version of {} being run", exec_path().display())[]
+        &format!("Print the version of {} being run", exe_str())[]
     )
 }
