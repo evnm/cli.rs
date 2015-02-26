@@ -72,7 +72,7 @@
 extern crate getopts;
 use getopts::{Matches, Options};
 use std::{env, old_io};
-use std::old_io::fs;
+use std::fs;
 
 /// A collection of predefined exit codes cribbed from
 /// [sysexits.h](http://www.freebsd.org/cgi/man.cgi?query=sysexits).
@@ -136,8 +136,8 @@ pub mod sysexits {
 fn exe_str() -> String {
     let realpath_str = env::current_exe()
         .map(|path| {
-            let realpath = fs::readlink(&path).unwrap_or(path);
-            String::from_str(realpath.filename_str().unwrap_or(""))
+            let realpath = fs::read_link(&path).unwrap_or(path);
+            String::from_str(realpath.file_name().unwrap().to_str().unwrap_or(""))
         });
     realpath_str.unwrap_or(String::new())
 }
@@ -153,7 +153,7 @@ fn exe_str() -> String {
 ///     [option description]...
 /// ```
 pub fn usage_string(opts: &Options) -> String {
-    format!("{}", opts.usage(opts.short_usage(exe_str().as_slice())))
+    format!("{}", opts.usage(opts.short_usage(exe_str().as_slice()).as_slice()))
 }
 
 /// Construct a version string.
@@ -184,7 +184,7 @@ pub fn parse_args(opts: &Options) -> Matches {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
-            match old_io::stderr().write_str(usage_string(opts)) {
+            match old_io::stderr().write_str(usage_string(opts).as_slice()) {
                 Ok(()) => panic!(getopts_error.to_string()),
                 Err(write_error) =>
                     // Write to stderr failed -- panic with both error messages.
@@ -211,6 +211,6 @@ pub fn versionopt(opts: &mut Options) -> &mut Options {
     opts.optflag(
         "",
         "version",
-        format!("Print the version of {} being run", exe_str())
+        format!("Print the version of {} being run", exe_str()).as_slice()
     )
 }
