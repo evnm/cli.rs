@@ -153,7 +153,7 @@ fn exe_str() -> String {
 ///     [option description]...
 /// ```
 pub fn usage_string(opts: &Options) -> String {
-    format!("{}", opts.usage(&opts.short_usage(exe_str().as_slice())[]))
+    format!("{}", opts.usage(opts.short_usage(exe_str().as_slice())))
 }
 
 /// Construct a version string.
@@ -184,7 +184,7 @@ pub fn parse_args(opts: &Options) -> Matches {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
-            match old_io::stderr().write_str(&usage_string(opts)[]) {
+            match old_io::stderr().write_str(usage_string(opts)) {
                 Ok(()) => panic!(getopts_error.to_string()),
                 Err(write_error) =>
                     // Write to stderr failed -- panic with both error messages.
@@ -211,6 +211,6 @@ pub fn versionopt(opts: &mut Options) -> &mut Options {
     opts.optflag(
         "",
         "version",
-        &format!("Print the version of {} being run", exe_str())[]
+        format!("Print the version of {} being run", exe_str())
     )
 }
