@@ -65,8 +65,11 @@
 #![crate_type="rlib"]
 
 #![feature(collections)]
+#![feature(core)]
 #![feature(env)]
-#![feature(io)]
+#![feature(fs)]
+#![feature(old_io)]
+#![feature(os)]
 #![feature(path)]
 
 extern crate getopts;
