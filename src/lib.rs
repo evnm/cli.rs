@@ -66,16 +66,15 @@
 
 #![feature(collections)]
 #![feature(core)]
-#![feature(env)]
 #![feature(fs)]
-#![feature(old_io)]
+#![feature(io)]
 #![feature(os)]
 #![feature(path)]
 
 extern crate getopts;
 use getopts::{Matches, Options};
-use std::{env, old_io};
-use std::fs;
+use std::{env, io, fs};
+use std::io::Write;
 
 /// A collection of predefined exit codes cribbed from
 /// [sysexits.h](http://www.freebsd.org/cgi/man.cgi?query=sysexits).
@@ -187,7 +186,7 @@ pub fn parse_args(opts: &Options) -> Matches {
         Ok(matches) => matches,
         Err(getopts_error) => {
             // Write usage string to stderr, then panic.
-            match old_io::stderr().write_str(usage_string(opts).as_slice()) {
+            match write!(&mut io::stderr(), "{}", usage_string(opts)) {
                 Ok(()) => panic!(getopts_error.to_string()),
                 Err(write_error) =>
                     // Write to stderr failed -- panic with both error messages.
