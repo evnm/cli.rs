@@ -66,10 +66,6 @@
 
 #![feature(collections)]
 #![feature(core)]
-#![feature(fs)]
-#![feature(io)]
-#![feature(os)]
-#![feature(path)]
 
 extern crate getopts;
 use getopts::{Matches, Options};
